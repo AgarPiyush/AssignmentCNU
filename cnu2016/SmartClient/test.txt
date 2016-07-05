@@ -1,4 +1,6 @@
-2 on ac
+2 off ac
 4 off ac
 3 on wh
 5 off wh
+4 on co
+7 off co

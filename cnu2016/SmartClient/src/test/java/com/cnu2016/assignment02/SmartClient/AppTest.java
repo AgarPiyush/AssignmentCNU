@@ -1,38 +1,58 @@
 package com.cnu2016.assignment02.SmartClient;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
-/**
- * Unit test for simple App.
- */
-public class AppTest 
-    extends TestCase
+public class AppTest
 {
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public AppTest( String testName )
+    @Test
+     public void ForCOTest()
     {
-        super( testName );
+        SmartClient CO = new SmartClient();
+        CO.setStatus();
+        App.ForCO("on","4",CO);
+        assertEquals(CO.getStatus(), Status.ON);
+        App.ForCO("off","4",CO);
+        assertEquals(CO.getStatus(), Status.OFF);
+        
+        CO.unsetStatus();
+        App.ForCO("on","4",CO);
+        assertEquals(CO.getStatus(), Status.ON);
+        App.ForCO("off","4",CO);
+        assertEquals(CO.getStatus(), Status.OFF);
+        
     }
-
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
+    @Test
+    public void ForWHTest()
     {
-        return new TestSuite( AppTest.class );
+        SmartClient WH = new SmartClient();
+        WH.setStatus();
+        App.ForWH("on","4",WH);
+        assertEquals(WH.getStatus(), Status.ON);
+        App.ForWH("off","4",WH);
+        assertEquals(WH.getStatus(), Status.OFF);
+        
+        WH.unsetStatus();
+        App.ForWH("on","4",WH);
+        assertEquals(WH.getStatus(), Status.ON);
+        App.ForWH("off","4",WH);
+        assertEquals(WH.getStatus(), Status.OFF);
+        
     }
-
-    /**
-     * Rigourous Test :-)
-     */
-    public void testApp()
+    @Test
+    public void ForACTest()
     {
-        assertTrue( true );
+        SmartClient AC = new SmartClient();
+        AC.setStatus();
+        App.ForAC("on","4",AC);
+        assertEquals(AC.getStatus(), Status.ON);
+        App.ForAC("off","4",AC);
+        assertEquals(AC.getStatus(), Status.OFF);
+        
+        AC.unsetStatus();
+        App.ForAC("on","4",AC);
+        assertEquals(AC.getStatus(), Status.ON);
+        App.ForAC("off","4",AC);
+        assertEquals(AC.getStatus(), Status.OFF);
     }
 }
