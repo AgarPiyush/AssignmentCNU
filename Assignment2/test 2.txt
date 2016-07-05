@@ -1,4 +1,0 @@
-2 on ac
-4 off ac
-3 on wh
-5 off wh
