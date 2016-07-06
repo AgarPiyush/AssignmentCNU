@@ -10,15 +10,16 @@ public class AppTest
     {
         SmartClient CO = new SmartClient();
         CO.setStatus();
-        App.ForCO("on","4",CO);
+        App obj = new App();
+        obj.ForCO("on","4",CO);
         assertEquals(CO.getStatus(), Status.ON);
-        App.ForCO("off","4",CO);
+        obj.ForCO("off","4",CO);
         assertEquals(CO.getStatus(), Status.OFF);
         
         CO.unsetStatus();
-        App.ForCO("on","4",CO);
+        obj.ForCO("on","4",CO);
         assertEquals(CO.getStatus(), Status.ON);
-        App.ForCO("off","4",CO);
+        obj.ForCO("off","4",CO);
         assertEquals(CO.getStatus(), Status.OFF);
         
     }
@@ -27,15 +28,16 @@ public class AppTest
     {
         SmartClient WH = new SmartClient();
         WH.setStatus();
-        App.ForWH("on","4",WH);
+        App obj = new App();
+        obj.ForWH("on","4",WH);
         assertEquals(WH.getStatus(), Status.ON);
-        App.ForWH("off","4",WH);
+        obj.ForWH("off","4",WH);
         assertEquals(WH.getStatus(), Status.OFF);
         
         WH.unsetStatus();
-        App.ForWH("on","4",WH);
+        obj.ForWH("on","4",WH);
         assertEquals(WH.getStatus(), Status.ON);
-        App.ForWH("off","4",WH);
+        obj.ForWH("off","4",WH);
         assertEquals(WH.getStatus(), Status.OFF);
         
     }
@@ -44,15 +46,37 @@ public class AppTest
     {
         SmartClient AC = new SmartClient();
         AC.setStatus();
-        App.ForAC("on","4",AC);
+        App obj = new App();
+        obj.ForAC("on","4",AC);
         assertEquals(AC.getStatus(), Status.ON);
-        App.ForAC("off","4",AC);
+        obj.ForAC("off","4",AC);
         assertEquals(AC.getStatus(), Status.OFF);
         
         AC.unsetStatus();
-        App.ForAC("on","4",AC);
+        obj.ForAC("on","4",AC);
         assertEquals(AC.getStatus(), Status.ON);
-        App.ForAC("off","4",AC);
+        obj.ForAC("off","4",AC);
         assertEquals(AC.getStatus(), Status.OFF);
+    }
+    @Test
+    public void Read_Compute()
+    {
+        SmartClient AC = new SmartClient();
+        SmartClient WH = new SmartClient();
+        SmartClient CO = new SmartClient();
+        App obj = new App();
+        String test_input = "unit_testing.txt";
+        obj.Read_Compute(test_input, AC, WH, CO);
+        assertEquals(AC.getStatus(), Status.ON);
+        assertEquals(WH.getStatus(), Status.OFF);
+        assertEquals(CO.getStatus(), Status.OFF);
+      
+    }
+    @Test
+    public void EnumTest()
+    {
+        Status st = Status.valueOf("ON");
+        assertEquals(st, Status.ON);
+        
     }
 }

@@ -5,11 +5,11 @@ import java.util.*;
 enum Status { ON , OFF } 
 public class App
 {
-    static void ForWH(String whNewStatus, String time, SmartClient WH)
+    void ForWH(String whNewStatus, String time, SmartClient WH)
     {
+            Status currentStatus = WH.getStatus();
             if (whNewStatus.equals("on")) 
             {
-                Status currentStatus = WH.getStatus();
                 if (currentStatus == Status.OFF) 
                 {
                     System.out.println("Washing machine turned on at " + time);
@@ -22,24 +22,22 @@ public class App
             }
             else 
             {
-                Status currentStatus = WH.getStatus();
                 if (currentStatus == Status.ON) 
                 {
-                    System.out.println("Washing machine turned off at " + time);
+                    System.out.println("Washing machine turned off at" + time);
                 }   
                 else 
                 {
                     System.out.println("Washing machine already off at " + time);
                 }
                 WH.unsetStatus();
-               
             }
     }
-    static void ForAC(String acNewStatus, String time, SmartClient AC)
+    void ForAC(String acNewStatus, String time, SmartClient AC)
     {
+        Status currentStatus = AC.getStatus();
         if(acNewStatus.equals("on")) 
         {
-            Status currentStatus = AC.getStatus();
             if (currentStatus == Status.OFF) 
             {
                 System.out.println("AC turned on at " + time);
@@ -52,7 +50,6 @@ public class App
         }
         else 
         {
-            Status currentStatus = AC.getStatus();
             if (currentStatus == Status.ON) 
             {
                 System.out.println("AC turned off at " + time);
@@ -64,11 +61,11 @@ public class App
              AC.unsetStatus();
         }
     }
-    static void ForCO(String coNewStatus, String time, SmartClient CO)
+    void ForCO(String coNewStatus, String time, SmartClient CO)
     {
+        Status currentStatus = CO.getStatus();
         if (coNewStatus.equals("on")) 
         {
-            Status currentStatus = CO.getStatus();
             if (currentStatus == Status.OFF) 
             {
                 System.out.println("Cooking oven turned on at " + time);
@@ -81,7 +78,6 @@ public class App
         } 
         else 
         {
-            Status currentStatus = CO.getStatus();
             if (currentStatus == Status.ON) 
             {
                 System.out.println("Cooking oven turned off at " + time);
@@ -94,19 +90,16 @@ public class App
             
         }
     }
-    public static void main(String args[]) 
+    void Read_Compute(String input_file, SmartClient AC, SmartClient WH, SmartClient CO)
     {
         ArrayList<String> request = new ArrayList<String>();
-        SmartClient AC = new SmartClient();
-        SmartClient WH = new SmartClient();
-        SmartClient CO = new SmartClient();
         AC.unsetStatus();
         WH.unsetStatus();
         CO.unsetStatus();
-        
+        BufferedReader br;
         try
         {
-            BufferedReader br = new BufferedReader(new FileReader("test.txt"));
+            br = new BufferedReader(new FileReader(input_file));
             String line = br.readLine();
             while(line != null)
             {
@@ -114,22 +107,22 @@ public class App
                 line = br.readLine();
             }
             Collections.sort(request);
-            
+            App obj = new App();
 		    for (int i = 0; i < request.size(); i++) 
 		    {
 		         String ind_request = request.get(i);
 		         String parts[] = ind_request.split(" ");
 		         if( parts[2].equals("ac"))
 		         {
-		             ForAC(parts[1], parts[0], AC);
+		             obj.ForAC(parts[1], parts[0], AC);
 		         }
 		         else if( parts[2].equals("co") )
 		         {
-		              ForCO(parts[1], parts[0], CO);
+		              obj.ForCO(parts[1], parts[0], CO);
 		         }
 		         else if( parts[2].equals("wh") )
 		         {
-		              ForWH(parts[1], parts[0], WH);
+		              obj.ForWH(parts[1], parts[0], WH);
 		         }
 		    } 
         }
@@ -141,5 +134,14 @@ public class App
         {
             e.printStackTrace();   
         }
+    }
+    public static void main(String args[]) 
+    {
+        SmartClient AC = new SmartClient();
+        SmartClient WH = new SmartClient();
+        SmartClient CO = new SmartClient();
+        String input_file = "test.txt";
+        App obj = new App();
+        obj.Read_Compute(input_file, AC, WH, CO);
     }  
 }
