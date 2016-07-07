@@ -1,0 +1,22 @@
+First Query
+
+select (sum(priceEach*quantityOrdered)) as SellingPrice, orderDate from Orders, OrderItemT where Orders.orderId = OrderItemT.orderId group by orderDate ; 
+
+Second Query
+
+select (sum((priceEach-buyPrice)*quantityOrdered)) as Profit, orderDate from Orders, Product , OrderItemT where Product.productCode = OrderItemT.productCode and OrderItemT.orderId = Orders.orderId group by orderDate;
+
+Third Query
+
+select  avg(quantityOrdered) as AvgQuantityOrdered, Users.customerName from Orders, Users , OrderItemT where Users.customerName = Orders.customerName and OrderItemT.orderId = Orders.orderId group by Users.customerName;
+
+Fourth Query
+
+ALTER TABLE Product ADD mark boolean DEFAULT TRUE;
+UPDATE Product set mark = FALSE where Product.productCode = "S10_16
+
+Fifth Query
+
+DELETE FROM Orders where shipped = "Placed";
+DELETE FROM OrderItemT where (productCode = "S18_1589" and quantityOrdered = 4 and priceEach = 100);
+
