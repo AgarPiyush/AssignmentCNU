@@ -31,7 +31,7 @@ public class ProductController {
         List<Product> products = productCrud.findByMark(true);
         return ResponseEntity.status(HttpStatus.OK).body(products);
     }
-    @RequestMapping(value="api//products/{id}", method = RequestMethod.GET)
+    @RequestMapping(value="api/products/{id}", method = RequestMethod.GET)
     public ResponseEntity getProductById(@PathVariable("id") int id)
     {
         Product p = productCrud.findByProductIdAndMark(id, true);
