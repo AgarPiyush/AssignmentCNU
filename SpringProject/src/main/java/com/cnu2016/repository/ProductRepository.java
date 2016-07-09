@@ -7,6 +7,6 @@ import org.springframework.data.repository.CrudRepository;
 
 
 public interface ProductRepository extends CrudRepository<Product, Integer>  {
-    Product findByProductIdAndMark(int a, boolean b);
-    List<Product> findByMark(boolean c);
+    Product findByProductIdAndDiscontinued(int a, boolean b);
+    List<Product> findByDiscontinued(boolean c);
 }

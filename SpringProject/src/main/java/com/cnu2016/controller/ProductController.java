@@ -28,13 +28,13 @@ public class ProductController {
     @RequestMapping(value="api/products", method = RequestMethod.GET)
     public ResponseEntity retrieveProducts()
     {
-        List<Product> products = productCrud.findByMark(true);
+        List<Product> products = productCrud.findByDiscontinued(false);
         return ResponseEntity.status(HttpStatus.OK).body(products);
     }
     @RequestMapping(value="api/products/{id}", method = RequestMethod.GET)
     public ResponseEntity getProductById(@PathVariable("id") int id)
     {
-        Product p = productCrud.findByProductIdAndMark(id, true);
+        Product p = productCrud.findByProductIdAndDiscontinued(id, false);
         if(p == null)
             return ifNullNotFound();
         return ResponseEntity.status(HttpStatus.OK).body(p);
@@ -54,7 +54,7 @@ public class ProductController {
         if(p == null)
             return ifNullNotFound();
 
-        p.setMark(false);
+        p.setDiscontinued(true);
         productCrud.save(p);
         return ResponseEntity.status(HttpStatus.OK).body(p);
     }
@@ -66,7 +66,7 @@ public class ProductController {
         if(productExist == null)
             return ifNullNotFound();
 
-        p.setMark(true);
+        p.setDiscontinued(false);
         productCrud.save(p);
         return ResponseEntity.status(HttpStatus.OK).body(p);
     }
@@ -75,7 +75,7 @@ public class ProductController {
     public ResponseEntity patchProduct(@RequestBody Product p, @PathVariable("id") int id)
     {
         Product productExist = productCrud.findOne(id);
-        if(productExist == null)
+        if(productExist == null || productExist.isDiscontinued() == true)
             return ifNullNotFound();
 
         if(p.getProductCode() != null)
