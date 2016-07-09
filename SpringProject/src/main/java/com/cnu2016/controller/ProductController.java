@@ -67,6 +67,7 @@ public class ProductController {
             return ifNullNotFound();
 
         p.setDiscontinued(false);
+        p.setProductId(productExist.getProductId());
         productCrud.save(p);
         return ResponseEntity.status(HttpStatus.OK).body(p);
     }
