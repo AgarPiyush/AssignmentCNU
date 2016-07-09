@@ -1,4 +1,4 @@
-
+FROM maven:3-jdk-8
 VOLUME /tmp
 ADD . /
 RUN apt-get update
