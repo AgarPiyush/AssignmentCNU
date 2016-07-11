@@ -36,7 +36,7 @@ public class QueueConnect {
             //TODO: catch exception
         } catch (AmazonClientException ace) {
             ace.printStackTrace();
-            //TODO: catch exception
+            //TODO catch exception
         }
     }
 }
