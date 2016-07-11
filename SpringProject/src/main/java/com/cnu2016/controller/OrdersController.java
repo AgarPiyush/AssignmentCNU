@@ -9,7 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.SynchronousQueue;
 
 /**
@@ -22,28 +24,39 @@ public class OrdersController
     OrdersRepository orderCrud;
     @Autowired
     UsersRepository usersCrud;
+    private ResponseEntity ifNullNotFound()
+    {
+        Map<String, String> hmap = new HashMap<String, String>();
+        hmap.put("detail", "Not found.");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(hmap);
+    }
 
-    @RequestMapping(value = "api/orders", method = RequestMethod.GET)
-    public ResponseEntity createOrders()
+    @RequestMapping(value = "api/order", method = RequestMethod.GET)
+    public ResponseEntity getAllOrders()
     {
         System.out.println("Order api hit");
         Iterable<Orders> ordersList = orderCrud.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(ordersList);
     }
-    @RequestMapping(value = "api/ordersId/{id}", method = RequestMethod.GET)
-    public ResponseEntity getUsersByOrderId(@PathVariable("id") int id)
+    @RequestMapping(value = "api/orderId/{id}", method = RequestMethod.GET)
+    public ResponseEntity getUsersOrderByOrderId(@PathVariable("id") int id)
     {
         System.out.println("Inside the api");
         Orders orderObj = orderCrud.findOne(id);
-        System.out.println(orderObj.getUserObj().getUserId());
-        return ResponseEntity.status(HttpStatus.OK).body(orderObj.getUserObj());
+        if(orderObj == null)
+            return ifNullNotFound();
+        //System.out.println(orderObj.getUserObj().getUserId());
+        return ResponseEntity.status(HttpStatus.OK).body(orderObj);
     }
 
     @RequestMapping(value = "api/order", method = RequestMethod.POST)
     public ResponseEntity createOrder(@RequestBody Orders p)
     {
+        System.out.println("Hey");
         Orders obj = new Orders();
         orderCrud.save(obj);
         return ResponseEntity.status(HttpStatus.OK).body(obj);
     }
+
+
 }

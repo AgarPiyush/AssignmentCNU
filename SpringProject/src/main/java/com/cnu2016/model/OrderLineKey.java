@@ -24,7 +24,8 @@ public class OrderLineKey implements Serializable {
     private Orders orderLineOrdersObj;
 
 
-    OrderLineKey(){
+
+    public OrderLineKey(){
     }
 
     public Product getOrderLineProductObj() {

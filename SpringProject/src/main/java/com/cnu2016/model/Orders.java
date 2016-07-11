@@ -24,23 +24,11 @@ public class Orders
     @JoinColumn(name = "userId")
     private Users userObj;
 
- /*   @OneToMany(fetch = FetchType.LAZY)
-    @JsonIgnore
-    @JoinColumn(name = "orderItem")
-    private OrderLine orderLineObj;  */
-
     public Orders()
     {
         this.orderDate = new Date();
         this.status = "In Process";
     }
-    /*public Orders(Date orderDate, Users userId, String status)
-    {
-        this.orderDate = orderDate;
-        this.userId = userId;
-        this.status = status;
-    }
-    */
     public int getOrderId()
     {
         return orderId;
