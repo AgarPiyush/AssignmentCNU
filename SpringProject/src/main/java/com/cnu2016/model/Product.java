@@ -40,6 +40,7 @@ public class Product {
         this.productName = productName;
     }
 
+    @JsonProperty("qty")
     public int getQuantityInStock() {
         return quantityInStock;
     }
@@ -65,7 +66,7 @@ public class Product {
         this.categoryId = categoryId;
     }
 
-    @JsonProperty("id")
+    @JsonProperty("product_id")
     public int getProductId() {
         return productId;
     }
