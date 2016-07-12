@@ -33,7 +33,7 @@ public class FeedbackController {
     private ResponseEntity addFeedBack(@RequestBody Feedback p)
     {
         feedbackCrud.save(p);
-        return ResponseEntity.status(HttpStatus.OK).body(p);
+        return ResponseEntity.status(HttpStatus.CREATED).body(p);
     }
     @RequestMapping(value = "/api/contact", method = RequestMethod.GET)
     private ResponseEntity getAllFeedBack()
