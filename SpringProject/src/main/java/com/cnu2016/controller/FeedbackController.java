@@ -29,13 +29,13 @@ public class FeedbackController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(hmap);
     }
 
-        @RequestMapping(value = "/api/feedbacks", method = RequestMethod.POST)
+        @RequestMapping(value = "/api/contact", method = RequestMethod.POST)
     private ResponseEntity addFeedBack(@RequestBody Feedback p)
     {
         feedbackCrud.save(p);
         return ResponseEntity.status(HttpStatus.OK).body(p);
     }
-    @RequestMapping(value = "/api/feedbacks", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/contact", method = RequestMethod.GET)
     private ResponseEntity getAllFeedBack()
     {
         Iterable<Feedback>p  = feedbackCrud.findAll();

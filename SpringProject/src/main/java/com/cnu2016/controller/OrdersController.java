@@ -38,7 +38,7 @@ public class OrdersController
         Iterable<Orders> ordersList = orderCrud.findByDiscontinued(false);
         return ResponseEntity.status(HttpStatus.OK).body(ordersList);
     }
-    @RequestMapping(value = "api/orderId/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "api/orders/{id}", method = RequestMethod.GET)
     public ResponseEntity getUsersOrderByOrderId(@PathVariable("id") int id)
     {
         System.out.println("Inside the api");
