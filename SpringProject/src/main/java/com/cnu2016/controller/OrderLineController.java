@@ -64,7 +64,7 @@ public class OrderLineController
     {
         Map<String, String> hmap = new HashMap<String, String>();
         hmap.put("detail", "Not found.");
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(hmap);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(hmap);
     }
     @RequestMapping(value = "api/orders/{id}/orderLineItem", method = RequestMethod.POST)
     public ResponseEntity addProduct(@RequestBody ProductSerializer p, @PathVariable("id") int id)
@@ -76,13 +76,12 @@ public class OrderLineController
         }
         System.out.println("Inside add product");
         System.out.println("Product id "+p.getProductId()+" orderId "+id);
-        Product productObj = productCrud.findByProductId(p.getProductId());
-        Orders ordersObj = orderCrud.findByOrderId(id);
+        Product productObj = productCrud.findByProductIdAndDiscontinued(p.getProductId(),false);
+        Orders ordersObj = orderCrud.findByOrderIdAndDiscontinued(id,false);
 
         if(productObj == null || ordersObj == null) {
             System.out.println("Product and Order not foundß");
-
-            return ifNullNotFound();
+         return ifNullNotFound();
         }
 
         OrderLine orderLineObj = new OrderLine();
@@ -98,7 +97,7 @@ public class OrderLineController
         orderLineCrud.save(orderLineObj);
         if(productObj.getQuantityInStock() - p.getQuantity() < 0) {
             System.out.println("Quantity exceeded");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
+         //   return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(orderLineObj);
