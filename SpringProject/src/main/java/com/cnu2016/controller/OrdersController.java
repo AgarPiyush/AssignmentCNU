@@ -57,6 +57,11 @@ public class OrdersController
         orderCrud.save(obj);
         return ResponseEntity.status(HttpStatus.OK).body(obj);
     }
+    @RequestMapping(value = "api/health", method = RequestMethod.GET)
+    public ResponseEntity healthCheck(@RequestBody Orders p)
+    {
+        return ResponseEntity.status(HttpStatus.OK).body("");
+    }
 
 
 }
