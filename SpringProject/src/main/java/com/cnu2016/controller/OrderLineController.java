@@ -81,7 +81,7 @@ public class OrderLineController
 
         if(productObj == null || ordersObj == null) {
             System.out.println("Product and Order not foundß");
-         return ifNullNotFound();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
         }
 
         OrderLine orderLineObj = new OrderLine();
@@ -132,7 +132,7 @@ public class OrderLineController
         if(valid == 0)
         {
             System.out.println("OrderNotValid");
-            return ifNullNotFound();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
         }
 
         double totalPrice = 0;

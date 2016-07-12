@@ -64,7 +64,7 @@ public class OrdersController
     {
         Orders p = orderCrud.findOne(id);
         if(p == null || p.isDiscontinued())
-            return ifNullNotFound();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
 
         p.setDiscontinued(true);
         orderCrud.save(p);
