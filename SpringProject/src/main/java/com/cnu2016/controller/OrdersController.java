@@ -55,7 +55,7 @@ public class OrdersController
         System.out.println("Hey");
         Orders obj = new Orders();
         orderCrud.save(obj);
-        return ResponseEntity.status(HttpStatus.OK).body(obj);
+        return ResponseEntity.status(HttpStatus.CREATED).body(obj);
     }
     @RequestMapping(value="api/orders/{id}", method = RequestMethod.DELETE)
     public ResponseEntity deleteOrder(@PathVariable("id") int id)
@@ -69,11 +69,6 @@ public class OrdersController
         return ResponseEntity.status(HttpStatus.OK).body(p);
     }
 
-    @RequestMapping(value = "api/health", method = RequestMethod.GET)
-    public ResponseEntity healthCheck(@RequestBody Orders p)
-    {
-        return ResponseEntity.status(HttpStatus.OK).body("");
-    }
 
 
 

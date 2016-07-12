@@ -155,4 +155,12 @@ public class OrderLineController
         return ResponseEntity.status(HttpStatus.OK).body(totalPrice);
     }
 
+    @RequestMapping(value = "api/health", method = RequestMethod.GET)
+    public ResponseEntity healthCheck()
+    {
+        System.out.println("Hey");
+        return ResponseEntity.status(HttpStatus.OK).body("");
+    }
+
+
 }
