@@ -2,6 +2,7 @@ package com.cnu2016.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -43,6 +44,7 @@ public class Orders
         return orderId;
     }
 
+    @JsonProperty("id")
     public void setOrderId(int orderId)
     {
         this.orderId = orderId;

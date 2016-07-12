@@ -84,11 +84,6 @@ public class OrderLineController
 
             return ifNullNotFound();
         }
-        if(productObj.getQuantityInStock() - p.getQuantity() < 0) {
-            System.out.println("Quantity exceeded");
-
-            return ifNullNotFound();
-        }
 
         OrderLine orderLineObj = new OrderLine();
         OrderLineKey orderLineKeyObj = new OrderLineKey();
@@ -101,6 +96,11 @@ public class OrderLineController
         orderLineObj.setQuantityOrdered(p.getQuantity());
 
         orderLineCrud.save(orderLineObj);
+        if(productObj.getQuantityInStock() - p.getQuantity() < 0) {
+            System.out.println("Quantity exceeded");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
+        }
+
         return ResponseEntity.status(HttpStatus.OK).body(orderLineObj);
 
     }
