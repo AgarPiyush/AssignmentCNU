@@ -27,7 +27,7 @@ public class ProductController {
     {
         Map<String, String> hmap = new HashMap<String, String>();
         hmap.put("detail", "Not found.");
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(hmap);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(hmap);
     }
 
 
@@ -58,7 +58,7 @@ public class ProductController {
     @RequestMapping(value="api/products/{id}", method = RequestMethod.DELETE)
     public ResponseEntity deleteProduct(@PathVariable("id") int id)
     {
-        Product p = productCrud.findOne(id);
+        Product p = productCrud.findByProductIdAndDiscontinued(id,false);
         if(p == null)
             return ifNullNotFound();
 
