@@ -76,7 +76,8 @@ public class ProductController {
         Product productExist = productCrud.findOne(id);
         if(productExist == null)
             return ifNullNotFound();
-
+        if(p.getProductCode() == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(p);
         p.setDiscontinued(false);
         p.setProductId(productExist.getProductId());
         productCrud.save(p);
@@ -87,7 +88,7 @@ public class ProductController {
     public ResponseEntity patchProduct(@RequestBody Product p, @PathVariable("id") int id)
     {
         Product productExist = productCrud.findOne(id);
-        if(productExist == null || productExist.isDiscontinued() == true)
+        if(productExist == null || productExist.isDiscontinued())
             return ifNullNotFound();
 
         if(p.getProductCode() != null)

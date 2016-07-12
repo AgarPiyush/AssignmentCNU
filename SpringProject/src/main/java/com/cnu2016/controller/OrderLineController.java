@@ -72,9 +72,8 @@ public class OrderLineController
         if(p == null)
         {
             System.out.println("Request body empty");
-            return ifNullNotFound();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
         }
-        System.out.println("Inside add product");
         System.out.println("Product id "+p.getProductId()+" orderId "+id);
         Product productObj = productCrud.findByProductIdAndDiscontinued(p.getProductId(),false);
         Orders ordersObj = orderCrud.findByOrderIdAndDiscontinued(id,false);
@@ -97,7 +96,6 @@ public class OrderLineController
         orderLineCrud.save(orderLineObj);
         if(productObj.getQuantityInStock() - p.getQuantity() < 0) {
             System.out.println("Quantity exceeded");
-         //   return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
         }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(orderLineObj);
@@ -107,13 +105,13 @@ public class OrderLineController
     public ResponseEntity checkout(@RequestBody UserOrderDetail p, @PathVariable("id") int id)
     {
         if(p == null)
-            return ifNullNotFound();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
         if(p.getUserName() == null || p.getAddress() == null)
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
 
         Orders ordersObj = orderCrud.findByOrderId(id);
         if(ordersObj == null)
-            ifNullNotFound();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
 
         Users userObj = userCrud.findByCustomerName(p.getUserName());
         if(userObj == null) //creating new user

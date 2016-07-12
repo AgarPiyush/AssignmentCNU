@@ -19,6 +19,7 @@ public class UserOrderDetail {
     private String pincode;
     private String status;
 
+    @JsonProperty("address")
     public String getAddress() {
         return address;
     }
