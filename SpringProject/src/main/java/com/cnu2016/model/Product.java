@@ -66,7 +66,7 @@ public class Product {
         this.categoryId = categoryId;
     }
 
-    @JsonProperty("product_id")
+    @JsonProperty("id")
     public int getProductId() {
         return productId;
     }
