@@ -108,6 +108,8 @@ public class OrderLineController
     {
         if(p == null)
             return ifNullNotFound();
+        if(p.getUserName() == null || p.getAddress() == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("");
 
         Orders ordersObj = orderCrud.findByOrderId(id);
         if(ordersObj == null)
