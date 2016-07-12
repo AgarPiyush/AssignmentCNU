@@ -1,6 +1,7 @@
 package com.cnu2016.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sun.org.apache.xpath.internal.operations.Or;
 
 import javax.persistence.*;

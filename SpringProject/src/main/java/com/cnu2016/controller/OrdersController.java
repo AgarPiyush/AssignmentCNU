@@ -31,25 +31,25 @@ public class OrdersController
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(hmap);
     }
 
-    @RequestMapping(value = "api/order", method = RequestMethod.GET)
+    @RequestMapping(value = "api/orders", method = RequestMethod.GET)
     public ResponseEntity getAllOrders()
     {
         System.out.println("Order api hit");
-        Iterable<Orders> ordersList = orderCrud.findAll();
+        Iterable<Orders> ordersList = orderCrud.findByDiscontinued(false);
         return ResponseEntity.status(HttpStatus.OK).body(ordersList);
     }
     @RequestMapping(value = "api/orderId/{id}", method = RequestMethod.GET)
     public ResponseEntity getUsersOrderByOrderId(@PathVariable("id") int id)
     {
         System.out.println("Inside the api");
-        Orders orderObj = orderCrud.findOne(id);
+        Orders orderObj = orderCrud.findByOrderIdAndDiscontinued(id,false);
         if(orderObj == null)
             return ifNullNotFound();
         //System.out.println(orderObj.getUserObj().getUserId());
         return ResponseEntity.status(HttpStatus.OK).body(orderObj);
     }
 
-    @RequestMapping(value = "api/order", method = RequestMethod.POST)
+    @RequestMapping(value = "api/orders", method = RequestMethod.POST)
     public ResponseEntity createOrder(@RequestBody Orders p)
     {
         System.out.println("Hey");
@@ -57,11 +57,24 @@ public class OrdersController
         orderCrud.save(obj);
         return ResponseEntity.status(HttpStatus.OK).body(obj);
     }
+    @RequestMapping(value="api/orders/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity deleteOrder(@PathVariable("id") int id)
+    {
+        Orders p = orderCrud.findOne(id);
+        if(p == null || p.isDiscontinued())
+            return ifNullNotFound();
+
+        p.setDiscontinued(true);
+        orderCrud.save(p);
+        return ResponseEntity.status(HttpStatus.OK).body(p);
+    }
+
     @RequestMapping(value = "api/health", method = RequestMethod.GET)
     public ResponseEntity healthCheck(@RequestBody Orders p)
     {
         return ResponseEntity.status(HttpStatus.OK).body("");
     }
+
 
 
 }

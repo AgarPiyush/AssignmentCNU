@@ -18,6 +18,15 @@ public class Orders
     private int orderId;
     private Date orderDate;
     private String status;
+    private boolean discontinued;
+
+    public boolean isDiscontinued() {
+        return discontinued;
+    }
+
+    public void setDiscontinued(boolean discontinued) {
+        this.discontinued = discontinued;
+    }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore

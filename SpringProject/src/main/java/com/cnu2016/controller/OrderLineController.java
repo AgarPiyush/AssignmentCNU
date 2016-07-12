@@ -66,7 +66,7 @@ public class OrderLineController
         hmap.put("detail", "Not found.");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(hmap);
     }
-    @RequestMapping(value = "api/order/{id}/orderLineItem", method = RequestMethod.POST)
+    @RequestMapping(value = "api/orders/{id}/orderLineItem", method = RequestMethod.POST)
     public ResponseEntity addProduct(@RequestBody ProductSerializer p, @PathVariable("id") int id)
     {
         if(p == null)
@@ -74,6 +74,7 @@ public class OrderLineController
             System.out.println("Request body empty");
             return ifNullNotFound();
         }
+        System.out.println("Inside add product");
         System.out.println("Product id "+p.getProductId()+" orderId "+id);
         Product productObj = productCrud.findByProductId(p.getProductId());
         Orders ordersObj = orderCrud.findByOrderId(id);
@@ -103,7 +104,7 @@ public class OrderLineController
         return ResponseEntity.status(HttpStatus.OK).body(orderLineObj);
 
     }
-    @RequestMapping(value = "api/order/{id}", method = RequestMethod.PATCH)
+    @RequestMapping(value = "api/orders/{id}", method = RequestMethod.PATCH)
     public ResponseEntity checkout(@RequestBody UserOrderDetail p, @PathVariable("id") int id)
     {
         if(p == null)
