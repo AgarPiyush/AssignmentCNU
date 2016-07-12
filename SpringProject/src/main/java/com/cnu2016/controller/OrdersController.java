@@ -28,7 +28,7 @@ public class OrdersController
     {
         Map<String, String> hmap = new HashMap<String, String>();
         hmap.put("detail", "Not found.");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(hmap);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(hmap);
     }
 
     @RequestMapping(value = "api/orders", method = RequestMethod.GET)

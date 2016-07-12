@@ -64,7 +64,7 @@ public class OrderLineController
     {
         Map<String, String> hmap = new HashMap<String, String>();
         hmap.put("detail", "Not found.");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(hmap);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(hmap);
     }
     @RequestMapping(value = "api/orders/{id}/orderLineItem", method = RequestMethod.POST)
     public ResponseEntity addProduct(@RequestBody ProductSerializer p, @PathVariable("id") int id)
