@@ -151,7 +151,7 @@ public class OrderLineController
                 productCrud.save(product);
             }
         }
-        return ResponseEntity.status(HttpStatus.OK).body("");
+        return ResponseEntity.status(HttpStatus.OK).body(p);
     }
 
     @RequestMapping(value = "api/health", method = RequestMethod.GET)
