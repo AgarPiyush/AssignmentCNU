@@ -1,6 +1,8 @@
 package com.cnu2016.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.sun.org.apache.xpath.internal.operations.Or;
 
 import javax.persistence.*;
 
@@ -8,14 +10,17 @@ import javax.persistence.*;
  * Created by Piyush on 7/9/16.
  */
 @Entity
-@Table(name = "OrderLine")
+@Table(name = "OrderLine_copy")
 public class OrderLine {
     @EmbeddedId
     OrderLineKey id;
 
     private int quantityOrdered;
     private double priceEach;
+    public OrderLine()
+    {
 
+    }
     public OrderLineKey getId() {
         return id;
     }

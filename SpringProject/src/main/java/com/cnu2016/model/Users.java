@@ -83,6 +83,7 @@ public class Users {
         this.phone = phone;
     }
 
+    @JsonProperty("address")
     public String getAddressLine1() {
         return addressLine1;
     }
