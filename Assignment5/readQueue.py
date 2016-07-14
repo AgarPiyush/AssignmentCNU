@@ -8,8 +8,8 @@ from boto.sqs.message import Message
 
 import threading
 
-db = pymysql.connect(host='aline-cnu-insights-dev.czuocyoc6awe.us-east-1.rds.amazonaws.com',
-                             user='pagarwal',
+db = pymysql.connect(host='localhost',
+                             user='root',
                              password='pagarwal',
                              db='cnu2016_pagarwal',
                              charset='utf8mb4',
@@ -31,13 +31,15 @@ def printit():
         body = message1.body
         message = json.loads(body)
         print(message)
-        CMD = "INSERT INTO AuditLog (ipAddress,ExecuteTime,RequestTime,ResponseCode,RequestUrl) VALUES(\"" + \
-              str(message["IP Address"]) + "\",\"" + str(message["ExecuteTime"]) + "\",\"" + str(message["Time"]) \
-              + "\",\"" + str(message["Response code"]) + "\",\"" + str(message["Request URL"]) + "\");"
-        print CMD
-        cursor.execute(CMD)
-        db.commit()
-        message1.delete()
+        line[4] = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(float(line[4]) / 1000))
+        #
+         CMD = "INSERT INTO audit_log (request_ip_address,response_code,request_duration_ms,url,parameters,timestamp,request_type) VALUES(\"" + \
+               str(message["IP Address"]) + "\",\"" + str(message["ExecuteTime"]) + "\",\"" + str(message["Time"]) \
+               + "\",\"" + str(message["Response code"]) + "\",\"" + str(message["Request URL"]) + "\");"
+        # print CMD
+        # cursor.execute(CMD)
+        # db.commit()
+        # message1.delete()
 printit()
 
 while True:
