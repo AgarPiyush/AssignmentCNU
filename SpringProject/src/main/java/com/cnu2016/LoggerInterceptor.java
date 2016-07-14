@@ -46,7 +46,7 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter  {
 //                hashm.put(nameAndValue[0], nameAndValue[1]);
 //            }
 //        }
-//        hashm.put("RequestURL", request.getRequestURL().toString());
+        hashm.put("RequestURL", request.getRequestURL().toString());
         hashm.put("Time",request.getAttribute("startTime").toString());
         hashm.put("IPAddress",request.getRemoteAddr());
         int responseCode = response.getStatus();
