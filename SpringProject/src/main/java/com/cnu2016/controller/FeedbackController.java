@@ -33,8 +33,6 @@ public class FeedbackController {
     private ResponseEntity getAllFeedBack()
     {
         Iterable<Feedback>p  = feedbackCrud.findAll();
-        if(p == null)
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(p);
         return ResponseEntity.status(HttpStatus.OK).body(p);
     }
 }

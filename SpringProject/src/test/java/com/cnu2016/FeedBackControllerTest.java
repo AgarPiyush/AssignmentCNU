@@ -4,10 +4,7 @@ package com.cnu2016;
  * Created by Piyush on 7/14/16.
  */
 import com.cnu2016.controller.OrderLineController;
-import com.cnu2016.model.OrderLine;
-import com.cnu2016.model.Orders;
-import com.cnu2016.model.Product;
-import com.cnu2016.model.Users;
+import com.cnu2016.model.*;
 import com.cnu2016.repository.FeedbackRepository;
 import com.cnu2016.repository.OrdersRepository;
 import com.cnu2016.repository.ProductRepository;
@@ -37,4 +34,35 @@ import java.util.Date;
 
 public class FeedBackControllerTest {
 
+    @Value("${local.server.port}")
+        int port;
+    Feedback feedbackObj;
+
+    @Autowired
+    FeedbackRepository feedbackCrud;
+    @Before
+    public void setUp() {
+        feedbackObj = new Feedback();
+        feedbackObj.setUserName("Piyush");
+        feedbackCrud.save(feedbackObj);
+        RestAssured.port = port;
+    }
+    @Test
+    public void canFetchAllFeedback(){
+        RestAssured.when().
+                get("api/contact/").
+                then().
+                statusCode(HttpStatus.SC_OK);
+    }
+    @Test
+    public void canPostFeedback() {
+        System.out.println(feedbackObj.getId());
+        int id = feedbackObj.getId();
+        RestAssured.given().contentType("application/json").
+                body("{\"user_name:\":\""+feedbackObj.getUserName()+"\"}").
+                when().
+                post("/api/contact/").
+                then().
+                statusCode(HttpStatus.SC_CREATED);
+    }
 }

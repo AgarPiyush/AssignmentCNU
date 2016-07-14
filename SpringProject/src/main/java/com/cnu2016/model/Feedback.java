@@ -22,10 +22,10 @@ public class Feedback {
     private String description;
     private Date timeStamp;
 
-    Feedback(){
+    public  Feedback(){
         this.timeStamp = new Date();
     }
-
+    @JsonProperty("id")
     public int getId() {
         return id;
     }
