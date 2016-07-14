@@ -47,16 +47,12 @@ public class ProductControllerTest
         obj2 = new Product();
 
         obj1.setDiscontinued(false);
-        obj1.setProductCode("Code1");
+        obj1.setProductCode("code1");
         obj1.setBuyPrice(42.422);
+        obj1.setProductDescription("description1");
         obj1.setQuantityInStock(100);
-        obj2.setDiscontinued(false);
-        obj2.setProductCode("Code2");
-        obj2.setBuyPrice(43.422);
-        obj2.setQuantityInStock(200);
-
         prodCrud.save(obj1);
-        prodCrud.save(obj2);
+
         RestAssured.port = port;
     }
 
@@ -72,6 +68,12 @@ public class ProductControllerTest
                 body("id",Matchers.is(id)).
                 body("code",Matchers.is(code)).
                 body("qty",Matchers.is(quantity));
+
+        RestAssured.when().
+                get("api/products/{id}", 988988).
+                then().
+                statusCode(HttpStatus.SC_NOT_FOUND);
+
     }
     @Test
     public void canFetchAll(){
@@ -109,18 +111,83 @@ public class ProductControllerTest
     @Test
     public void canPatchProduct() {
         int id = obj1.getProductId();
-        String code = obj1.getProductCode();
+        String obj1ProductCode = obj1.getProductCode();
+        String obj1ProductDescription = obj1.getProductDescription();
+        System.out.println("{\"code\":\""+obj1ProductCode+"\", \"description\":\"newDescription\"}");
         RestAssured.given().contentType("application/json").
-                body("{\"code\":\"testProduct\", \"description\":\"newdesciption\"}").
+                body("{\"code\":\""+obj1ProductCode+"\", \"description\":\"newDescription\"}").
                 when().
-                patch("/api/products").
+                patch("/api/products/{id}",id).
                 then().
-                statusCode(HttpStatus.SC_CREATED).
-                body("code", equalTo("testProduct"));
+                statusCode(HttpStatus.SC_OK).
+                body("code", equalTo(obj1ProductCode)).
+                body("description",equalTo("newDescription")).
+                body("id", equalTo(id));
 
+
+        RestAssured.given().contentType("application/json").
+                body("{\"code\":\"newcode\", \"description\":\"newDescription\"}").
+                when().
+                patch("/api/products/{id}",id).
+                then().
+                statusCode(HttpStatus.SC_OK).
+                body("code", equalTo("newcode")).
+                body("description",equalTo("newDescription")).
+                body("id", equalTo(id));
+
+
+        RestAssured.given().contentType("application/json").
+                body("{\"code\":\"newcode\"}").
+                when().
+                patch("/api/products/{id}",id).
+                then().
+                statusCode(HttpStatus.SC_OK).
+                body("code", equalTo("newcode")).
+                body("description",equalTo(prodCrud.findByProductId(id).getProductDescription())).
+                body("id", equalTo(id));
 
     }
+    @Test
+    public void canPutProduct() {
+        System.out.println("Inside patch");
+        int id = obj1.getProductId();
+        String obj1ProductCode = obj1.getProductCode();
+        String obj1ProductDescription = obj1.getProductDescription();
+        //System.out.println("{\"code\":\""+obj1ProductCode+"\", \"description\":\"newDescription\"}");
 
-:
+        RestAssured.given().contentType("application/json").
+                body("{}").
+                when().
+                put("/api/products/{id}",id).
+                then().
+                statusCode(HttpStatus.SC_BAD_REQUEST);
+
+        RestAssured.given().contentType("application/json").
+                body("{\"description\":\"newDescription\"}").
+                when().
+                put("/api/products/{id}",id).
+                then().
+                statusCode(HttpStatus.SC_BAD_REQUEST);
+
+        RestAssured.given().contentType("application/json").
+                body("{\"code\":\""+obj1ProductCode+"\", \"description\":\"newDescription\"}").
+                when().
+                put("/api/products/{id}",id).
+                then().
+                statusCode(HttpStatus.SC_OK).
+                body("code",equalTo(obj1ProductCode)).
+                body("description", equalTo(prodCrud.findByProductId(id).getProductDescription())).
+                body("id",equalTo(id));
+
+        RestAssured.given().contentType("application/json").
+                body("{\"code\":\""+obj1ProductCode+"\"}").
+                when().
+                put("/api/products/{id}",id).
+                then().
+                statusCode(HttpStatus.SC_OK).
+                body("code",equalTo(obj1ProductCode)).
+                body("description", equalTo(null)).
+                body("id",equalTo(id));
+    }
 
 }

@@ -67,7 +67,7 @@ public class OrderLineController
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(hmap);
     }
     @RequestMapping(value = "api/orders/{id}/orderLineItem", method = RequestMethod.POST)
-    public ResponseEntity addProduct(@RequestBody ProductSerializer p, @PathVariable("id") int id)
+    public ResponseEntity addProductInOrder(@RequestBody ProductSerializer p, @PathVariable("id") int id)
     {
         if(p == null)
         {

@@ -38,21 +38,23 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter  {
         long timeToExecute = currentTime - (long) request.getAttribute("startTime");
         Map<String,String> hashm = new HashMap<String,String>();
         String queryString = request.getQueryString();
-        if(queryString != null) {
-            String[] pares = queryString.split("&");
-            for (String pare : pares) {
-                String[] nameAndValue = pare.split("=");
-                hashm.put(nameAndValue[0], nameAndValue[1]);
-            }
-        }
-        hashm.put("Request URL", request.getRequestURL().toString());
+        hashm.put("Parameters",queryString);
+//        if(queryString != null) {
+//            String[] pares = queryString.split("&");
+//            for (String pare : pares) {
+//                String[] nameAndValue = pare.split("=");
+//                hashm.put(nameAndValue[0], nameAndValue[1]);
+//            }
+//        }
+//        hashm.put("RequestURL", request.getRequestURL().toString());
         hashm.put("Time",request.getAttribute("startTime").toString());
-        hashm.put("IP Address",request.getRemoteAddr());
+        hashm.put("IPAddress",request.getRemoteAddr());
         int responseCode = response.getStatus();
-        hashm.put("Response code", responseCode+"");
+        hashm.put("ResponseCode", responseCode+"");
         hashm.put("ExecuteTime", timeToExecute+"");
+        hashm.put("RequestType",request.getMethod());
         String sends = "Request Url "+request.getRequestURL() + " Time "+request.getAttribute("startTime")
-                +" IP Address ="+request.getRemoteAddr() + " Response Code =  " + response.getStatus() ;
+               +" IP Address ="+request.getRemoteAddr() + " Response Code =  " + response.getStatus() +" Requet Type "+request.getMethod();
         String json = new ObjectMapper().writeValueAsString(hashm);
         obj.sendMessage(json);
     }
