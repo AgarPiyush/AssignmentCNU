@@ -30,16 +30,19 @@ def printit():
     for message1 in queue.receive_messages() :
         body = message1.body
         message = json.loads(body)
-        print(message)
-        line[4] = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(float(line[4]) / 1000))
-        #
-         CMD = "INSERT INTO audit_log (request_ip_address,response_code,request_duration_ms,url,parameters,timestamp,request_type) VALUES(\"" + \
-               str(message["IP Address"]) + "\",\"" + str(message["ExecuteTime"]) + "\",\"" + str(message["Time"]) \
-               + "\",\"" + str(message["Response code"]) + "\",\"" + str(message["Request URL"]) + "\");"
-        # print CMD
-        # cursor.execute(CMD)
-        # db.commit()
-        # message1.delete()
+        print(message['Parameters'])
+        if message['Parameters']==None:
+            message['Parameters'] = "NULL"
+
+        message['Time'] = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(float(message['Time']) / 1000))
+        print(message['Time'])
+
+        #cmd = "INSERT INTO audit_log (request_ip_address,response_code,request_duration_ms,url,parameters,timestamp,request_type) VALUES(\""+str(message["IPAddress"])+ "\","+str(message["ResponseCode"])+","+str(message["ExecuteTime"])+",\""+message["RequestURL"]+"\",\""+message["Parameters"]+"\","+str(message["Time"])+",\""+message["RequestType"]+"\");"
+        k = "INSERT INTO audit_log (request_ip_address,response_code,request_duration_ms,url,parameters,timestamp,request_type) VALUES(\""+str(message["IPAddress"]) + "\","+str(message["ResponseCode"])+","+str(message["ExecuteTime"])+",\""+message["RequestURL"]+"\","+str(message["Parameters"])+",\""+str(message["Time"])+"\",\""+message["RequestType"]+"\");"
+        print k
+        cursor.execute(k)
+        db.commit()
+        message1.delete()
 printit()
 
 while True:
