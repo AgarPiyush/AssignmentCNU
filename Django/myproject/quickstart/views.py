@@ -1,4 +1,7 @@
 from django.shortcuts import render
+from rest_framework.decorators import detail_route
+from rest_framework import mixins
+from rest_framework import generics
 
 # Create your views here.
 from . import models
@@ -71,8 +74,34 @@ class OrdersViewSet(viewsets.ModelViewSet):
 
 
 class UserssViewSet(viewsets.ModelViewSet):
-
     serializer_class = UsersSerializer
     def get_queryset(self):
         return Orders.objects.all()
 
+class CategoryViewSet(viewsets.ModelViewSet):
+    serializer_class = CategorySerializer
+    def get_queryset(self):
+        return Category.objects.all()
+
+
+class OrderLineViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.ModelViewSet):
+    serializer_class = OrderLineSerializer
+    print "Inside orderlineview"
+    def get_queryset(self):
+        return OrderlineCopy.objects.all()
+
+    def list(self, request, *args, **kwargs):
+        queryset = OrderlineCopy.objects.filter(orderid=kwargs["order_id"])
+        serializer = OrderLineSerializer(queryset, many=True)
+        return JsonResponse(serializer.data, safe = False)
+
+    def retrieve(self, request, *args, **kwargs):
+        queryset = OrderlineCopy.objects.filter(id=kwargs["pk"])
+        serializer = OrderLineSerializer(queryset,many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+
+    #
+    # def create(self, request):
+    #     serializers = OrderLineSerializer(request, many=True)
+    #     return JsonResponse(serializers.data, safe=False)
