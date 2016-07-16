@@ -3,6 +3,7 @@ package com.cnu2016;
 /**
  * Created by Piyush on 7/13/16.
  */
+import com.cnu2016.Service.UserOrderDetail;
 import com.cnu2016.controller.OrderLineController;
 import com.cnu2016.model.OrderLine;
 import com.cnu2016.model.Orders;
@@ -50,7 +51,7 @@ public class OrderLineControllerTest {
     Product productObj, productObj2;
     OrderLine orderLineObj;
     Users userObj;
-
+    UserOrderDetail userOrderDetail;
     @Before
     public void setUp() {
 
@@ -65,10 +66,30 @@ public class OrderLineControllerTest {
 
         productObj = new Product();
         productObj.setQuantityInStock(10);
+        productObj.setProductName("New Product");
 
         productObj2 = new Product();
-        productObj2.setQuantityInStock(10);
+        productObj2.setQuantityInStock(5);
 
+        userObj.setCustomerName("Piyush");
+        userObj.setCity("Kolkata");
+        userObj.setAddressLine1("A1");
+        userObj.setAddressLine2("A2");
+        userObj.setCountry("India");
+        userObj.setPhone("9724324242");
+        userObj.setContactLastName("Agar");
+        userObj.setState("West Bengal");
+        userObj.setContactLastName("Agarwal");
+        userObj.setContactFirstName("Piyush");
+        userObj.setPostalCode("700054");
+
+
+        // UserOrderDetail was not required
+        userOrderDetail = new UserOrderDetail();
+        userOrderDetail.setAddress("Address");
+        userOrderDetail.setPincode("700050");
+        userOrderDetail.setUserNname("UserName");
+        userOrderDetail.setStatus("In progress");
 
         orderCrud.save(orderObj);
         productCrud.save(productObj);
@@ -89,8 +110,17 @@ public class OrderLineControllerTest {
 
     @Test
     public void checkoutOrder() {
-        String k = "{\"id\":"+orderObj.getOrderId()+"\",\"user_name\":\"Piyush\",\"address\":\"Address\"}";
+        String k = "{\"id\":"+orderObj.getOrderId()+"\",\"user_name\":\""+userObj.getCountry()+"\",\"address\":\""+userObj.getAddressLine1()+"\",\"city\":\""+userObj.getCity()+"\"}";
         System.out.println(k);
+
+        RestAssured.given().contentType("application/json").
+                body("{}").
+                when().
+                post("api/orders/{id}/orderLineItem",orderObj.getOrderId()).
+                then().
+                statusCode(HttpStatus.SC_BAD_REQUEST);
+
+
         RestAssured.given().contentType("application/json").
                 body("{\"product_id\":\""+productObj.getProductId()+"\", \"qty\":7}").
                 when().
@@ -99,26 +129,34 @@ public class OrderLineControllerTest {
                 statusCode(HttpStatus.SC_CREATED);
 
         RestAssured.given().contentType("application/json").
-                body("{\"id\":"+orderObj.getOrderId()+",\"user_name\":\"Piyush\",\"address\":\"Address\"}").
+                body("{\"id\":"+orderObj.getOrderId()+",\"user_name\":\"LetsCheck\",\"address\":\"Address\"}").
                 when().
                 patch("api/orders/{id}",orderObj.getOrderId()).
                 then().
                 statusCode(HttpStatus.SC_OK).
                 body("id", equalTo(orderObj.getOrderId()));
-
+        // User name test
         RestAssured.given().contentType("application/json").
                 body("{\"id\":"+orderObj.getOrderId()+",\"address\":\"Address\"}").
                 when().
                 patch("api/orders/{id}",orderObj.getOrderId()).
                 then().
                 statusCode(HttpStatus.SC_BAD_REQUEST);
-
+        // Address test
         RestAssured.given().contentType("application/json").
                 body("{\"id\":"+orderObj.getOrderId()+",\"user_name\":\"Piyush\"}").
                 when().
                 patch("api/orders/{id}",orderObj.getOrderId()).
                 then().
                 statusCode(HttpStatus.SC_BAD_REQUEST);
+//        // New User
+//        RestAssured.given().contentType("application/json").
+//                body("{\"id\":"+orderObj.getOrderId()+",\"user_name\":\"NewUser\",\"address\":\"Address\"}").
+//                when().
+//                patch("api/orders/{id}",orderObj.getOrderId()).
+//                then().
+//                statusCode(HttpStatus.SC_OK);
+
 
         RestAssured.given().contentType("application/json").
                 body("{\"product_id\":\""+productObj2.getProductId()+"\", \"qty\":7}").
@@ -126,13 +164,15 @@ public class OrderLineControllerTest {
                 post("api/orders/{id}/orderLineItem",orderObj.getOrderId()).
                 then().
                 statusCode(HttpStatus.SC_CREATED);
-
+        // When a product exceeds quantity
         RestAssured.given().contentType("application/json").
                 body("{\"id\":"+orderObj.getOrderId()+",\"user_name\":\"Piyush\",\"address\":\"Address\"}").
                 when().
                 patch("api/orders/{id}",orderObj.getOrderId()).
                 then().
                 statusCode(HttpStatus.SC_BAD_REQUEST);
+
+
     }
     @Test
     public void heathCheck(){

@@ -44,6 +44,10 @@ public class FeedBackControllerTest {
     public void setUp() {
         feedbackObj = new Feedback();
         feedbackObj.setUserName("Piyush");
+        feedbackObj.setDescription("Desc");
+        feedbackObj.setEmail("com@com.com");
+        feedbackObj.setTimeStamp(new Date());
+        feedbackObj.setOrderId(10);
         feedbackCrud.save(feedbackObj);
         RestAssured.port = port;
     }

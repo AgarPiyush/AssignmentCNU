@@ -8,6 +8,7 @@ package com.cnu2016;
  */
 
 import com.cnu2016.controller.ProductController;
+import com.cnu2016.model.Category;
 import com.cnu2016.model.Product;
 import com.cnu2016.repository.ProductRepository;
 import com.jayway.restassured.RestAssured;
@@ -40,6 +41,7 @@ public class ProductControllerTest
     @Value("${local.server.port}")
         int port;
     Product obj1, obj2;
+    Category categoryObj;
 
     @Before
     public void setUp() {
@@ -52,7 +54,12 @@ public class ProductControllerTest
         obj1.setProductDescription("description1");
         obj1.setQuantityInStock(100);
         prodCrud.save(obj1);
-
+        // Category Object was not required
+        categoryObj = new Category();
+        categoryObj.setCategoryId(10);
+        categoryObj.setCategoryDescription("Des");
+        String categoryDescription = categoryObj.getCategoryDescription();
+        int categoryId = categoryObj.getCategoryId();
         RestAssured.port = port;
     }
 
@@ -103,7 +110,7 @@ public class ProductControllerTest
                 statusCode(HttpStatus.SC_OK);
 
         RestAssured.when().
-                get("api/products/{id}", id).
+                delete("api/products/{id}", id).
                 then().
                 statusCode(HttpStatus.SC_NOT_FOUND);
     }
