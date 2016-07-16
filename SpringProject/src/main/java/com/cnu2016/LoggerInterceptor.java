@@ -15,11 +15,8 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-
-
 @Component
 public class LoggerInterceptor extends HandlerInterceptorAdapter  {
     private static final Logger logger = LoggerFactory.getLogger(LoggerInterceptor.class);
@@ -34,6 +31,11 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter  {
         return true;
     }
 
+    /**
+     * Send logs to AWS queue. Message includes parameters, request url, time,
+     * ip address, response code, time, execute time, and request type. The logs
+     * are pushed to database using python script from SQS Queue
+     */
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         long currentTime = System.currentTimeMillis();
@@ -48,8 +50,6 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter  {
         hashm.put("ResponseCode", responseCode+"");
         hashm.put("ExecuteTime", timeToExecute+"");
         hashm.put("RequestType",request.getMethod());
-        String sends = "Request Url "+request.getRequestURL() + " Time "+request.getAttribute("startTime")
-               +" IP Address ="+request.getRemoteAddr() + " Response Code =  " + response.getStatus() +" Requet Type "+request.getMethod();
         String json = new ObjectMapper().writeValueAsString(hashm);
         obj.sendMessage(json);
     }
