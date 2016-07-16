@@ -23,13 +23,7 @@ public class FeedbackController {
     FeedbackRepository feedbackCrud;
 
 
-    private ResponseEntity ifNullNotFound() {
-        Map<String, String> hmap = new HashMap<String, String>();
-        hmap.put("detail", "Not found.");
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(hmap);
-    }
-
-        @RequestMapping(value = "/api/contact", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/contact", method = RequestMethod.POST)
     private ResponseEntity addFeedBack(@RequestBody Feedback p)
     {
         feedbackCrud.save(p);
@@ -39,8 +33,6 @@ public class FeedbackController {
     private ResponseEntity getAllFeedBack()
     {
         Iterable<Feedback>p  = feedbackCrud.findAll();
-        if(p == null)
-            return  ifNullNotFound();
         return ResponseEntity.status(HttpStatus.OK).body(p);
     }
 }

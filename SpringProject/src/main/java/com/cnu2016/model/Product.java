@@ -31,6 +31,16 @@ public class Product {
     public Product() {
 
     }
+    public Product(String productCode, String productDescription, boolean discontinued, String productName, int quantityInStock, double buyPrice, Integer categoryId)
+    {
+        this.productCode = productCode;
+        this.productDescription = productDescription;
+        this.discontinued = discontinued;
+        this.productName = productName;
+        this.quantityInStock = quantityInStock;
+        this.buyPrice = buyPrice;
+        this.categoryId = categoryId;
+    }
 
     public String getProductName() {
         return productName;

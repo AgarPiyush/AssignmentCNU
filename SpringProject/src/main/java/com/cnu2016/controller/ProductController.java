@@ -34,11 +34,9 @@ public class ProductController {
     @RequestMapping(value="api/products", method = RequestMethod.GET)
     public ResponseEntity retrieveProducts()
     {
-        //logger.info("Welcome home! The client locale is {}.");
-
         List<Product> products = productCrud.findByDiscontinued(false);
         if(products == null)
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("");
+            return ifNullNotFound();
 
         return ResponseEntity.status(HttpStatus.OK).body(products);
     }
@@ -47,7 +45,7 @@ public class ProductController {
     {
         Product p = productCrud.findByProductIdAndDiscontinued(id, false);
         if(p == null)
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("");
+            return ifNullNotFound();
         return ResponseEntity.status(HttpStatus.OK).body(p);
 
     }
@@ -87,6 +85,7 @@ public class ProductController {
     @RequestMapping(value = "api/products/{id}", method = RequestMethod.PATCH)
     public ResponseEntity patchProduct(@RequestBody Product p, @PathVariable("id") int id)
     {
+        logger.info("inside patch "+p.getProductCode()+"  "+p.getProductDescription());
         Product productExist = productCrud.findOne(id);
         if(productExist == null || productExist.isDiscontinued())
             return ifNullNotFound();
