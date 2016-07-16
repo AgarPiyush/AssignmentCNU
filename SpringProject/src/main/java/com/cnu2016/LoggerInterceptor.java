@@ -41,13 +41,6 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter  {
         Map<String,String> hashm = new HashMap<String,String>();
         String queryString = request.getQueryString();
         hashm.put("Parameters",queryString);
-//        if(queryString != null) {
-//            String[] pares = queryString.split("&");
-//            for (String pare : pares) {
-//                String[] nameAndValue = pare.split("=");
-//                hashm.put(nameAndValue[0], nameAndValue[1]);
-//            }
-//        }
         hashm.put("RequestURL", request.getRequestURL().toString());
         hashm.put("Time",request.getAttribute("startTime").toString());
         hashm.put("IPAddress",request.getRemoteAddr());
