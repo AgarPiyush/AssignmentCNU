@@ -60,20 +60,15 @@ public class OrderLineController
 
         return valid;
     }
-    private ResponseEntity ifNullNotFound()
-    {
-        Map<String, String> hmap = new HashMap<String, String>();
-        hmap.put("detail", "Not found.");
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(hmap);
-    }
+
     @RequestMapping(value = "api/orders/{id}/orderLineItem", method = RequestMethod.POST)
-    public ResponseEntity addProduct(@RequestBody ProductSerializer p, @PathVariable("id") int id)
+    public ResponseEntity addProductInOrder(@RequestBody ProductSerializer p, @PathVariable("id") int id)
     {
-        if(p == null)
-        {
-            System.out.println("Request body empty");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
-        }
+//        if(p == null)
+//        {
+//            System.out.println("Request body empty");
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
+//        }
         System.out.println("Product id "+p.getProductId()+" orderId "+id);
         Product productObj = productCrud.findByProductIdAndDiscontinued(p.getProductId(),false);
         Orders ordersObj = orderCrud.findByOrderIdAndDiscontinued(id,false);
@@ -104,8 +99,8 @@ public class OrderLineController
     @RequestMapping(value = "api/orders/{id}", method = RequestMethod.PATCH)
     public ResponseEntity checkout(@RequestBody UserOrderDetail p, @PathVariable("id") int id)
     {
-        if(p == null)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
+//        if(p == null)
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
         if(p.getUserName() == null || p.getAddress() == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
 
@@ -151,7 +146,7 @@ public class OrderLineController
                 productCrud.save(product);
             }
         }
-        return ResponseEntity.status(HttpStatus.OK).body("");
+        return ResponseEntity.status(HttpStatus.OK).body(ordersObj);
     }
 
     @RequestMapping(value = "api/health", method = RequestMethod.GET)

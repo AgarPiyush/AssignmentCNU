@@ -34,10 +34,9 @@ public class OrdersController
     @RequestMapping(value = "api/orders", method = RequestMethod.GET)
     public ResponseEntity getAllOrders()
     {
-        System.out.println("Order api hit");
         Iterable<Orders> ordersList = orderCrud.findByDiscontinued(false);
         if(ordersList == null)
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("");
+            return ifNullNotFound();
         return ResponseEntity.status(HttpStatus.OK).body(ordersList);
     }
     @RequestMapping(value = "api/orders/{id}", method = RequestMethod.GET)
@@ -46,7 +45,7 @@ public class OrdersController
         System.out.println("Inside the api");
         Orders orderObj = orderCrud.findByOrderIdAndDiscontinued(id,false);
         if(orderObj == null)
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("");
+            return ifNullNotFound();
         //System.out.println(orderObj.getUserObj().getUserId());
         return ResponseEntity.status(HttpStatus.OK).body(orderObj);
     }
@@ -64,7 +63,7 @@ public class OrdersController
     {
         Orders p = orderCrud.findOne(id);
         if(p == null || p.isDiscontinued())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("");
+            return ifNullNotFound();
         p.setDiscontinued(true);
         orderCrud.save(p);
         return ResponseEntity.status(HttpStatus.OK).body(p);

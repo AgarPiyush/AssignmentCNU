@@ -27,16 +27,10 @@ public class QueueConnect {
         this.sqs = sqs;
     }
     public void sendMessage(String message) {
-        try {
-            String myQueueUrl = sqs.getQueueUrl("cnu2016_pagarwal_assignment05").getQueueUrl();
-            sqs.sendMessage(new SendMessageRequest(myQueueUrl, message));
 
-        } catch (AmazonServiceException ase) {
-            ase.printStackTrace();
-            //TODO: catch exception
-        } catch (AmazonClientException ace) {
-            ace.printStackTrace();
-            //TODO catch exception
-        }
+            System.out.println("Sending message"+message);
+            String myQueueUrl = sqs.getQueueUrl("cnu2016_pagarwal_assignment05").getQueueUrl();
+            System.out.print("Queue url"+myQueueUrl);
+            sqs.sendMessage(new SendMessageRequest(myQueueUrl, message));
     }
 }
