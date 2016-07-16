@@ -84,13 +84,13 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class OrderLineSerializer(serializers.ModelSerializer):
-    order_id = serializers.IntegerField(source='orderid.orderid')
+    order_id = serializers.IntegerField(source='orderid.orderid',required=False, read_only=True)
+    id = serializers.IntegerField(required=False, read_only=True)
     product_id = serializers.IntegerField(source='productid.productid')
-    id = serializers.IntegerField(read_only=True)
     price = serializers.FloatField(source='priceeach', required = True)
     class Meta:
         model = OrderlineCopy
-        fields = ('order_id','product_id', 'id','price')
+        fields = ('product_id','price','order_id','id')
 
 
 
@@ -198,8 +198,5 @@ class OrdersSerializer(serializers.ModelSerializer):
             usersObj.save()
         instance.save()
         return instance
-
-
-
 
 

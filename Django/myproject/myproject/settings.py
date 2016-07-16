@@ -51,6 +51,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'quickstart.views.LogMiddleware'
 ]
 
 ROOT_URLCONF = 'myproject.urls'
@@ -74,7 +75,6 @@ TEMPLATES = [
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
-    'PAGE_SIZE': 5,
 
 }
 

@@ -79,7 +79,7 @@ class Orderlinetest(models.Model):
 
 class OrderlineCopy(models.Model):
     orderid = models.ForeignKey('Orders', models.DO_NOTHING, db_column='orderId')  # Field name made lowercase.
-    quantityordered = models.IntegerField(db_column='quantityOrdered')  # Field name made lowercase.
+    quantityordered = models.IntegerField(db_column='quantityOrdered', default=0)  # Field name made lowercase.
     priceeach = models.FloatField(db_column='priceEach')  # Field name made lowercase.
     productid = models.ForeignKey('Product', models.DO_NOTHING, db_column='productId')  # Field name made lowercase.
     id = models.AutoField(db_column='id', primary_key=True)
