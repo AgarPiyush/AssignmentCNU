@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -22,6 +23,8 @@ import java.util.Map;
 @Component
 public class LoggerInterceptor extends HandlerInterceptorAdapter  {
     private static final Logger logger = LoggerFactory.getLogger(LoggerInterceptor.class);
+    @Autowired
+    QueueConnect obj;
 
     @Override
     public boolean preHandle(HttpServletRequest request,
@@ -33,7 +36,6 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter  {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        QueueConnect obj = new QueueConnect();
         long currentTime = System.currentTimeMillis();
         long timeToExecute = currentTime - (long) request.getAttribute("startTime");
         Map<String,String> hashm = new HashMap<String,String>();
