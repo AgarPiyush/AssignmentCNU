@@ -1,0 +1,20 @@
+Query 1 
+select (sum(priceEach*quantityOrdered)) as SellingPrice, orderDate from MillionOrders, OrderLineMillion where MillionOrders.orderId = OrderLineMillion.orderId group by orderDate
+
+without indexing 8.83 sec
+With indexing: 6.81 sec on orderDate
+
+
+Query 2 
+select (sum((priceEach-buyPrice)*quantityOrdered)) as Profit, orderDate from MillionOrders, Product , OrderLineMillion where Product.productId = OrderLineMillion.productId and OrderLineMillion.orderId = MillionOrders.orderId group by orderDate;
+
+Without indexing 12.5 sec
+With indexing : 6.5 sec on orderDate
+
+
+
+Query 3
+
+select  avg(quantityOrdered) as AvgQuantityOrdered, Users.customerName from MillionOrders, Users , OrderLineMillion where Users.userId = MillionOrders.userId and OrderLineMillion.orderId = MillionOrders.orderId group by Users.customerName;
+Without indexing 19.4 sec
+With indexing 10.1 sec on customerName
