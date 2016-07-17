@@ -26,7 +26,17 @@ public class App
         }
     }
 
-    // Computations when status is changed
+    /**
+     *
+     * @param request
+     * @param applicancesIndex
+     * @param applianceObjList
+     * @throws InterruptedException
+     *  Using timer, the function updates status of each request appliance
+     *  ApplianceIndex contains the appliances in string format useful for finding the index in applianceObjList
+     *  which contains objects of appliances
+     *
+     */
     void compute(List<String> request, List<String> applicancesIndex, final List<SmartClient> applianceObjList) throws  InterruptedException
     {
         Timer timer = new Timer();
