@@ -6,28 +6,13 @@ import org.junit.Test;
 public class SmartClientTest 
 {
     @Test
-    public void setStatusTest()
+    public void setStatus()
     {
         SmartClient obj = new SmartClient();
-        obj.setStatus();
-        assertEquals(obj.getStatus(), Status.ON);
-    }
-    @Test
-    public void unsetStatusTest()
-    {
-        SmartClient obj = new SmartClient();
-        obj.unsetStatus();
-        assertEquals(obj.getStatus(), Status.OFF);
-    }
-    @Test
-    public void getStatusTest()
-    {
-        SmartClient obj = new SmartClient();
-        obj.setStatus();
-        Status check_status = obj.getStatus();
-        assertEquals(check_status, Status.ON);
-        obj.unsetStatus();
-        check_status = obj.getStatus();
-        assertEquals(check_status, Status.OFF);
+        obj.setCurrState(Status.ON);
+        assertEquals(obj.getCurrState(), Status.ON);
+        obj.setCurrState(Status.OFF);
+        assertEquals(obj.getCurrState(), Status.OFF);
+
     }
 }

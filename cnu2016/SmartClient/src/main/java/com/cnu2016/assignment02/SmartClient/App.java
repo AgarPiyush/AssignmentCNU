@@ -2,144 +2,106 @@ package com.cnu2016.assignment02.SmartClient;
 import java.io.*;
 import java.util.*;
 
-enum Status { ON , OFF } 
+enum Status { ON , OFF }
+enum ApplianceCode {WH, AC, CO}
+enum indexs {timeCurrent(0), newStatus(1), applianceType(2);
+    public final int value;
+    indexs(final int value) {
+        this.value = value;
+    }
+}
 public class App
 {
-    static void ForWH(String whNewStatus, String time, SmartClient WH)
+    // Schedule timer
+    static void newTimer(Timer timer, TimerTask task, long time)
     {
-            if (whNewStatus.equals("on")) 
-            {
-                Status currentStatus = WH.getStatus();
-                if (currentStatus == Status.OFF) 
-                {
-                    System.out.println("Washing machine turned on at " + time);
-                } 
-                else 
-                {
-                    System.out.println("Washing machine already on at " + time);
-                }
-                WH.setStatus();
-            }
-            else 
-            {
-                Status currentStatus = WH.getStatus();
-                if (currentStatus == Status.ON) 
-                {
-                    System.out.println("Washing machine turned off at " + time);
-                }   
-                else 
-                {
-                    System.out.println("Washing machine already off at " + time);
-                }
-                WH.unsetStatus();
-               
-            }
+        timer.schedule(task, time*1000);
     }
-    static void ForAC(String acNewStatus, String time, SmartClient AC)
+    // Print status of all Appliance
+    void printAllStatus(final List<SmartClient> applianceList, long time)
     {
-        if(acNewStatus.equals("on")) 
+        for(SmartClient eachAppliance : applianceList)
         {
-            Status currentStatus = AC.getStatus();
-            if (currentStatus == Status.OFF) 
-            {
-                System.out.println("AC turned on at " + time);
-            } 
-            else 
-            {
-                System.out.println("AC already on at " + time);
-            }
-                 AC.setStatus();
-        }
-        else 
-        {
-            Status currentStatus = AC.getStatus();
-            if (currentStatus == Status.ON) 
-            {
-                System.out.println("AC turned off at " + time);
-            } 
-            else 
-            {
-                System.out.println("AC already off at " + time);
-            }
-             AC.unsetStatus();
+            System.out.println("Appliacne "+eachAppliance.getCode()+" Status "+eachAppliance.getCurrState()+ " at Time "+time);
         }
     }
-    static void ForCO(String coNewStatus, String time, SmartClient CO)
+
+    /**
+     *
+     * @param request
+     * @param applicancesIndex
+     * @param applianceObjList
+     * @throws InterruptedException
+     *  Using timer, the function updates status of each request appliance
+     *  ApplianceIndex contains the appliances in string format useful for finding the index in applianceObjList
+     *  which contains objects of appliances
+     *
+     */
+    void compute(List<String> request, List<String> applicancesIndex, final List<SmartClient> applianceObjList) throws  InterruptedException
     {
-        if (coNewStatus.equals("on")) 
-        {
-            Status currentStatus = CO.getStatus();
-            if (currentStatus == Status.OFF) 
-            {
-                System.out.println("Cooking oven turned on at " + time);
-            } 
-            else 
-            {
-                System.out.println("Cooking oven already on at " + time);
+        Timer timer = new Timer();
+        for(String ind_request : request) {
+            String parts[] = ind_request.split(",");
+            final long time = Long.valueOf(parts[indexs.timeCurrent.value]).longValue();
+            String newFileStatus = parts[indexs.newStatus.value];
+            String applianceType = parts[indexs.applianceType.value];
+            final Status newStatus;
+            final int index = applicancesIndex.indexOf(applianceType.toUpperCase());
+            if(index == -1) {
+                System.out.println("Appliance not found");
+                continue;
             }
-            CO.setStatus();
-        } 
-        else 
-        {
-            Status currentStatus = CO.getStatus();
-            if (currentStatus == Status.ON) 
+            if (newFileStatus.equalsIgnoreCase("ON"))
+                newStatus = Status.ON;
+            else
+                newStatus = Status.OFF;
+            final SmartClient currAppliacne = applianceObjList.get(index);
+            newTimer(timer, new TimerTask()
             {
-                System.out.println("Cooking oven turned off at " + time);
-            } 
-            else 
-            {
-                System.out.println("Cooking oven already off at " + time);
-            }
-            CO.unsetStatus();
-            
+                @Override
+                public void run() {
+                    currAppliacne.setCurrState(newStatus);
+                    printAllStatus(applianceObjList, time);
+                }}, time);
         }
+        Thread.sleep(10000);
+        timer.cancel();
+
     }
-    public static void main(String args[]) 
+    // reading from file
+    void Read_Compute(String input_file, List<String> applicancesIndex, final List<SmartClient> applianceObjList )
     {
-        ArrayList<String> request = new ArrayList<String>();
-        SmartClient AC = new SmartClient();
-        SmartClient WH = new SmartClient();
-        SmartClient CO = new SmartClient();
-        AC.unsetStatus();
-        WH.unsetStatus();
-        CO.unsetStatus();
-        
-        try
-        {
-            BufferedReader br = new BufferedReader(new FileReader("test.txt"));
+        List<String>request = new ArrayList<String>();
+
+        BufferedReader br;
+        try {
+            br = new BufferedReader(new FileReader(input_file));
             String line = br.readLine();
-            while(line != null)
-            {
+            while (line != null) {
                 request.add(line);
                 line = br.readLine();
             }
             Collections.sort(request);
-            
-		    for (int i = 0; i < request.size(); i++) 
-		    {
-		         String ind_request = request.get(i);
-		         String parts[] = ind_request.split(" ");
-		         if( parts[2].equals("ac"))
-		         {
-		             ForAC(parts[1], parts[0], AC);
-		         }
-		         else if( parts[2].equals("co") )
-		         {
-		              ForCO(parts[1], parts[0], CO);
-		         }
-		         else if( parts[2].equals("wh") )
-		         {
-		              ForWH(parts[1], parts[0], WH);
-		         }
-		    } 
+            compute(request, applicancesIndex, applianceObjList);
         }
-        catch(FileNotFoundException e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
-        catch(IOException e)
+    }
+    // Creating map of appliance type to get index in the object list:
+    public static void main(String args[]) 
+    {
+        final List<SmartClient> applianceObjList = new ArrayList<SmartClient>();
+        List<String> applicancesIndex = new ArrayList<String>();
+        for(ApplianceCode eachAppliance: ApplianceCode.values())
         {
-            e.printStackTrace();   
+            SmartClient obj = new SmartClient(eachAppliance, Status.OFF);
+            applianceObjList.add(obj);
+            applicancesIndex.add(eachAppliance.toString());
         }
+        String input_file = "test.txt";
+        App obj = new App();
+        obj.Read_Compute(input_file, applicancesIndex, applianceObjList);
     }  
 }
