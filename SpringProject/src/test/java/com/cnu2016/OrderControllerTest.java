@@ -12,6 +12,7 @@ import com.cnu2016.repository.OrdersRepository;
 import com.cnu2016.repository.ProductRepository;
 import com.jayway.restassured.RestAssured;
 import org.apache.http.HttpStatus;
+
 import static org.hamcrest.Matchers.*;
 
 import org.junit.Before;
@@ -31,7 +32,7 @@ import java.util.Date;
 @SpringApplicationConfiguration(classes = Application.class)   // 2
 @WebAppConfiguration   // 3
 @IntegrationTest("server.port:0")   // 4
-@TestPropertySource(locations="classpath:test.properties")
+@TestPropertySource(locations = "classpath:test.properties")
 
 
 public class OrderControllerTest {
@@ -45,7 +46,7 @@ public class OrderControllerTest {
     FeedbackRepository feedbackCrud;
 
     @Value("${local.server.port}")
-        int port;
+    int port;
     Orders orderObj;
 
     @Before
@@ -57,8 +58,9 @@ public class OrderControllerTest {
         orderCrud.save(orderObj);
         RestAssured.port = port;
     }
+
     @Test
-    public void canFetchAllOrders(){
+    public void canFetchAllOrders() {
         RestAssured.when().
                 get("api/orders/").
                 then().
@@ -72,7 +74,7 @@ public class OrderControllerTest {
                 get("api/orders/{id}", id).
                 then().
                 statusCode(HttpStatus.SC_OK).
-                body("id",equalTo(id)).
+                body("id", equalTo(id)).
                 body("status", equalTo(orderObj.getStatus())).
                 body("discontinued", equalTo(orderObj.isDiscontinued()));
 
@@ -97,10 +99,10 @@ public class OrderControllerTest {
         int id = orderObj.getOrderId();
 
         RestAssured.when().
-                delete("api/orders/{id}",id).
+                delete("api/orders/{id}", id).
                 then().
                 statusCode(HttpStatus.SC_OK).
-                body("discontinued",equalTo(true));
+                body("discontinued", equalTo(true));
 
         RestAssured.when().
                 get("api/orders/{id}", id).
@@ -108,7 +110,7 @@ public class OrderControllerTest {
                 statusCode(HttpStatus.SC_NOT_FOUND);
 
         RestAssured.when().
-                delete("api/orders/{id}",id).
+                delete("api/orders/{id}", id).
                 then().
                 statusCode(HttpStatus.SC_NOT_FOUND);
     }

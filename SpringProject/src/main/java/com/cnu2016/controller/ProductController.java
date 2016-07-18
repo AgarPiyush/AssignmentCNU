@@ -2,8 +2,7 @@ package com.cnu2016.controller;
 /**
  * Created by Piyush on 7/7/16.
  */
-import com.cnu2016.LoggerInterceptor;
-import com.cnu2016.QueueConnect;
+
 import com.cnu2016.model.Product;
 import com.cnu2016.repository.ProductRepository;
 import java.util.*;
@@ -25,6 +24,7 @@ public class ProductController {
 
     private ResponseEntity ifNullNotFound()
     {
+        logger.error("NOT FOUND Error");
         Map<String, String> hmap = new HashMap<String, String>();
         hmap.put("detail", "Not found.");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(hmap);
@@ -34,6 +34,7 @@ public class ProductController {
     @RequestMapping(value="api/products", method = RequestMethod.GET)
     public ResponseEntity retrieveProducts()
     {
+        logger.info("GET Product HIT");
         List<Product> products = productCrud.findByDiscontinued(false);
         if(products == null)
             return ifNullNotFound();
@@ -43,6 +44,7 @@ public class ProductController {
     @RequestMapping(value="api/products/{id}", method = RequestMethod.GET)
     public ResponseEntity getProductById(@PathVariable("id") int id)
     {
+        logger.info("GET Product hit with api "+id);
         Product p = productCrud.findByProductIdAndDiscontinued(id, false);
         if(p == null)
             return ifNullNotFound();
@@ -52,6 +54,7 @@ public class ProductController {
     @RequestMapping(value="api/products", method = RequestMethod.POST)
     public ResponseEntity postProduct(@RequestBody Product p)
     {
+        logger.info("POST product api");
         productCrud.save(p);
         return ResponseEntity.status(HttpStatus.CREATED).body(p);
     }
@@ -59,10 +62,12 @@ public class ProductController {
     @RequestMapping(value="api/products/{id}", method = RequestMethod.DELETE)
     public ResponseEntity deleteProduct(@PathVariable("id") int id)
     {
+        logger.info("DELETE product id="+id);
         Product p = productCrud.findByProductIdAndDiscontinued(id,false);
-        if(p == null)
+        if(p == null) {
+            logger.error("Product not present");
             return ifNullNotFound();
-
+        }
         p.setDiscontinued(true);
         productCrud.save(p);
         return ResponseEntity.status(HttpStatus.OK).body(p);
@@ -71,6 +76,7 @@ public class ProductController {
     @RequestMapping(value="api/products/{id}", method = RequestMethod.PUT)
     public ResponseEntity putProduct(@RequestBody Product p, @PathVariable("id") int id)
     {
+        logger.info("PUT product id "+id);
         Product productExist = productCrud.findOne(id);
         if(productExist == null)
             return ifNullNotFound();
@@ -85,7 +91,7 @@ public class ProductController {
     @RequestMapping(value = "api/products/{id}", method = RequestMethod.PATCH)
     public ResponseEntity patchProduct(@RequestBody Product p, @PathVariable("id") int id)
     {
-        logger.info("inside patch "+p.getProductCode()+"  "+p.getProductDescription());
+        logger.info("PATCH product id "+id);
         Product productExist = productCrud.findOne(id);
         if(productExist == null || productExist.isDiscontinued())
             return ifNullNotFound();

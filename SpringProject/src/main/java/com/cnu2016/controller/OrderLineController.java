@@ -7,15 +7,12 @@ import com.cnu2016.repository.OrderLineReporsitory;
 import com.cnu2016.repository.OrdersRepository;
 import com.cnu2016.repository.ProductRepository;
 import com.cnu2016.repository.UsersRepository;
-import org.apache.catalina.connector.Response;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.HashMap;
-import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by Piyush on 7/9/16.
@@ -35,9 +32,17 @@ public class OrderLineController
     @Autowired
     UsersRepository userCrud;
 
-    private int isorderValid(int orderId)
+    private static final Logger logger = LoggerFactory.getLogger(OrderLineController.class);
+
+    /**
+     * @param orderId
+     * @return valid
+     * Checks if the order is valid or not. Not valid if any
+     * product exceeds the stock quantity
+     */
+    private int isOrderValid(int orderId)
     {
-        System.out.println("Check orderValid");
+        logger.info("Check for order validity"+orderId);
         int valid = 1;
         Iterable<OrderLine> all = orderLineCrud.findAll();
         for(OrderLine it:all)
@@ -56,25 +61,17 @@ public class OrderLineController
                 }
             }
         }
-        System.out.println("Check orderValid done");
-
         return valid;
     }
-
+    // Add products to existing cart
     @RequestMapping(value = "api/orders/{id}/orderLineItem", method = RequestMethod.POST)
     public ResponseEntity addProductInOrder(@RequestBody ProductSerializer p, @PathVariable("id") int id)
     {
-//        if(p == null)
-//        {
-//            System.out.println("Request body empty");
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
-//        }
-        System.out.println("Product id "+p.getProductId()+" orderId "+id);
+        logger.info("Add product to card orderId "+id+" productid "+p.getProductId());
         Product productObj = productCrud.findByProductIdAndDiscontinued(p.getProductId(),false);
         Orders ordersObj = orderCrud.findByOrderIdAndDiscontinued(id,false);
 
         if(productObj == null || ordersObj == null) {
-            System.out.println("Product and Order not foundß");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
         }
 
@@ -90,17 +87,22 @@ public class OrderLineController
 
         orderLineCrud.save(orderLineObj);
         if(productObj.getQuantityInStock() - p.getQuantity() < 0) {
-            System.out.println("Quantity exceeded");
+            logger.info("Quantity added is greater than stock");
         }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(orderLineObj);
 
     }
+
+    /**
+     *  Checkout order. Creates new user. Check for validity of order
+     *  Updates inventory if order valid
+     */
     @RequestMapping(value = "api/orders/{id}", method = RequestMethod.PATCH)
     public ResponseEntity checkout(@RequestBody UserOrderDetail p, @PathVariable("id") int id)
     {
-//        if(p == null)
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
+
+        logger.info("Check out item orderId "+id);
         if(p.getUserName() == null || p.getAddress() == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
 
@@ -111,6 +113,7 @@ public class OrderLineController
         Users userObj = userCrud.findByCustomerName(p.getUserName());
         if(userObj == null) //creating new user
         {
+            logger.info("Creating new user");
             userObj = new Users();
             userObj.setCustomerName(p.getUserName());
             userObj.setAddressLine1(p.getAddress());
@@ -120,15 +123,11 @@ public class OrderLineController
         ordersObj.setUserObj(userObj);
         ordersObj.setStatus(p.getStatus());
         orderCrud.save(ordersObj);
-        System.out.println("Before Validity ");
 
-        int valid = isorderValid(id);
-        System.out.println("Valid "+valid);
+        int valid = isOrderValid(id);
         if(valid == 0)
-        {
-            System.out.println("OrderNotValid");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("");
-        }
+
 
         double totalPrice = 0;
         Iterable<OrderLine> all = orderLineCrud.findAll();
@@ -152,7 +151,7 @@ public class OrderLineController
     @RequestMapping(value = "api/health", method = RequestMethod.GET)
     public ResponseEntity healthCheck()
     {
-        System.out.println("Hey");
+        logger.info("Health check");
         return ResponseEntity.status(HttpStatus.OK).body("");
     }
 

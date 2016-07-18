@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Created by Piyush on 7/10/16.
+ * POJO for post order api. Add product to card
  */
+
 public class ProductSerializer {
     private int productId;
     private int quantity;
@@ -35,7 +37,4 @@ public class ProductSerializer {
         this.productId = productId;
         this.quantity = qunatity;
     }
-
-
-
 }

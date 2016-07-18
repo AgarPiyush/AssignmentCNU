@@ -11,6 +11,7 @@ import java.util.Date;
 
 /**
  * Created by Piyush on 7/11/16.
+ * POJO for paatch order api. Checkout
  */
 public class UserOrderDetail {
 
