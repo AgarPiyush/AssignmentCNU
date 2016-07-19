@@ -8,7 +8,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     id = serializers.IntegerField(read_only=True, source='productid')
     code = serializers.CharField(source='productcode')
-    description = serializers.CharField(source='productcode')
+    description = serializers.CharField(source='productdescription')
     price = serializers.FloatField(source='buyprice')
     categoryname = serializers.CharField(source='categoryid.categoryname')
     categoryid = serializers.CharField(source='categoryid.categoryid', required = False)

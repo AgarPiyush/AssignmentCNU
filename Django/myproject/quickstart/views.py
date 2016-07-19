@@ -14,7 +14,8 @@ from rest_framework import mixins
 class LogMiddleware( object ):
 
     def process_response(self, request, response):
-        response._container = ['{"data":' + response._container[0] + "}"]
+        if request.__dict__['path'].startswith("/api"):
+            response._container = ['{"data":' + response._container[0] + "}"]
         return response
 
 from django.http import HttpResponse
@@ -29,7 +30,6 @@ def orders(request):
     return HttpResponse(models.Orders.objects.all())
 
 def ordersDetails(request):
-    print "Okay"
     startTime = request.GET.get('startDate','01/01/1900')
     startTime = datetime.strptime(startTime,'%m/%d/%Y').strftime('%Y-%m-%d')
     endTime = request.GET.get('endDate','01/01/2050')
@@ -156,7 +156,6 @@ class ProductCategoryViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
 
 class OrderCategoryViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     def list(self, request, *args, **kwargs):
-        print  "Inside Order Category"
         groupBy = request.GET.get('group_by', None)
         productCode = request.GET.get('code', None)
         categoryName = request.GET.get('category__name', None)
@@ -187,6 +186,9 @@ class OrderCategoryViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
             return JsonResponse(query,safe=False)
 
 
-
-
-
+class ProductsInCategoryViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    def list(self, request, *args, **kwargs):
+        query = Product.objects.filter(discontinued=0)
+        query = query.filter(categoryid__categoryid = kwargs["category_id"])
+        serializer = ProductSerializer(query, many=True)
+        return JsonResponse(serializer.data, safe=False)
