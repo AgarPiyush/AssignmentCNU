@@ -1,0 +1,26 @@
+<div class="modal-body row">
+    <div class="col-md-3">
+        <ul class="nav nav-pills nav-stacked">
+            <li class="active"><a href="#">Home</a></li>
+            <div ng-repeat="x in myCategory">
+                <ul class="nav nav-pills nav-stacked">
+                    <li><a href="#category_products/{{x.categoryid}}"</a>{{x.categoryname}}</li>
+                </ul>
+            </div>
+        </ul>
+    </div>
+
+    <div class="col-md-2">
+        <div class="row">
+            <div ng-repeat="x in orderProducts">
+                <a href="#products/{{x.id}}">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading"><center>Code = {{x.code}}</center></div>
+                        <div class="panel-body"><img src="http://www.sunspel.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/4/0/4001_102_5_3.jpg" class="img-responsive" style="width:100%" alt="Image"></div>
+                        <div class="panel-footer"><center>Price = {{x.price}}</center></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

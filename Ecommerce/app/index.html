@@ -18,25 +18,11 @@
 
   <link rel="stylesheet" href="app.css">
   <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
-  <style>
-    /* Remove the navbar's default rounded borders and increase the bottom margin */
-    .navbar {
-      margin-bottom: 20px;
-      border-radius: 0;
-    }
 
-    /* Remove the jumbotron's default bottom margin */
-    .jumbotron {
-      margin-bottom: 0;
-    }
-    /* Add a gray background color and some padding to the footer */
-    footer {
-      background-color: #f2f2f2;
-      padding: 15px;
-    }
-  </style>
 </head>
 <body ng-app="myApp">
+
+
 
 <div class="jumbotron">
   <div class="container text-center">
@@ -58,10 +44,10 @@
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
         <li class="active"><a href="#">Products</a></li>
-        <li><a href="#">Contact Us</a></li>
+        <li><a href="#orders">Contact Us</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#"><span class="glyphicon glyphicon-shopping-cart"></span> Cart</a></li>
+        <li><a href="#viewcart"><span class="glyphicon glyphicon-shopping-cart"></span> Cart</a></li>
       </ul>
     </div>
   </div>
@@ -78,6 +64,8 @@
 <script src="components/version/interpolate-filter.js"></script>
 <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
 <script src="app.js"></script>
+<script src="https://rawgithub.com/gsklee/ngStorage/master/ngStorage.js"></script>
+
 </body>
 </html>
 

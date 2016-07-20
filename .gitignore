@@ -1,7 +1,10 @@
 logs/*
 !.gitkeep
 node_modules/
-bower_components/
+./Ecommerce/app/bower_components/
+./Ecommerce/app/components/
+./Ecommerce/app/node_modules/
+./Ecommerce/e2e-test/
 tmp
 .DS_Store
 .idea

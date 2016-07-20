@@ -1,0 +1,33 @@
+<div class="modal-body row">
+    <div class="col-md-5">
+        <div class="panel panel-primary">
+        <div class="panel-heading"> <center>{{product_name.code}}</center></div>
+        <div class="panel-body"><img src="http://www.sunspel.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/4/0/4001_102_5_3.jpg" class="img-responsive" style="width:100%" alt="Image"></div>
+        </div>
+    </div>
+    <div class="col-md-7">
+        <div class="panel panel-primary">
+            <div class="panel-heading"><center> Product Description</center> </div>
+            <div class="panel-footer">{{product_name.description}}" </div>
+        </div>
+    </div>
+    <div class="col-md-7">
+        <div class="panel panel-primary">
+            <div class="panel-heading"><center> Product Price</center> </div>
+            <div class="panel-footer"><center>Rs  {{product_name.price}}</center> </div>
+        </div>
+    </div>
+    <div class="rating">
+        Rating
+        <br>
+        <span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
+    </div>
+    <div>
+        <br>
+    <button  ng-click="addToCart(product_name);" type="button" class="btn btn-primary">Add to cart</button>
+    </div>
+    <br>
+        Quantity:
+        <input ng-model="qty" type="number" name="points"
+               min="1" max="10000" step="1" value="1">
+</div>
