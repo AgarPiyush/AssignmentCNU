@@ -98,7 +98,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
 
 
-class OrderLineViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+class OrderLineViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin,mixins.DestroyModelMixin, viewsets.GenericViewSet):
     serializer_class = OrderLineSerializer
     orderid = serializers.IntegerField(source='orderid.orderid')
 
@@ -121,11 +121,12 @@ class OrderLineViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Re
 
         productObj = Product.objects.filter(productid = request.data["product_id"])
         ordersObj = Orders.objects.filter(orderid = kwargs["order_id"])
-
+        print request.data
         orderlineObj = OrderlineCopy.objects.create(
             orderid = ordersObj[0],
             productid = productObj[0],
-            priceeach = request.data["price"]
+            priceeach = request.data["price"],
+            quantityordered = request.data["qty"]
         )
         serializer = OrderLineSerializer(orderlineObj)
         return JsonResponse(serializer.data, safe=False)

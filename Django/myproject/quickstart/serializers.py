@@ -12,10 +12,10 @@ class ProductSerializer(serializers.ModelSerializer):
     price = serializers.FloatField(source='buyprice')
     categoryname = serializers.CharField(source='categoryid.categoryname')
     categoryid = serializers.CharField(source='categoryid.categoryid', required = False)
-
+    qty = serializers.IntegerField(source='quantityinstock',required=False)
     class Meta:
         model = Product
-        fields = ('id', 'code', 'description','price','categoryname','categoryid')
+        fields = ('id', 'code', 'description','price','categoryname','categoryid','qty')
 
     def create(self, validated_data):
         print validated_data
@@ -87,10 +87,12 @@ class OrderLineSerializer(serializers.ModelSerializer):
     order_id = serializers.IntegerField(source='orderid.orderid',required=False, read_only=True)
     id = serializers.IntegerField(required=False, read_only=True)
     product_id = serializers.IntegerField(source='productid.productid')
+    code = serializers.CharField(source='productid.productcode')
+    qty = serializers.IntegerField(source='quantityordered')
     price = serializers.FloatField(source='priceeach', required = True)
     class Meta:
         model = OrderlineCopy
-        fields = ('product_id','price','order_id','id')
+        fields = ('product_id','price','order_id','id','code','qty')
 
 
 
@@ -111,7 +113,7 @@ class OrdersSerializer(serializers.ModelSerializer):
         print validated_data
 
         ordersObj = Orders.objects.create(
-            status=validated_data['status'],
+            status=validated_data.get('status', "CREATED"),
             orderdate=datetime.now(),
         )
 
@@ -141,9 +143,10 @@ class OrdersSerializer(serializers.ModelSerializer):
             return instance
         # Now validate data has user id
 
+
         if instance.userid != None:
             usersObj, created = Users.objects.update_or_create(
-                customername=instance.userid.customername,
+                userid=instance.userid.userid,
                 defaults={'customername': validated_data['userid'].get('customername', instance.userid.customername),
                           'addressline1': validated_data['userid'].get('addressline1', instance.userid.addressline1)
                           }
