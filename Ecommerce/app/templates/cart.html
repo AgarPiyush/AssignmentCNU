@@ -24,7 +24,7 @@
                 <div class="col-md-2" ><span id = "{{x.id}}" class="itemName">{{x.price}} </span></div>
                 <div class="col-md-2" ><span id = "{{x.id}}" class="price" *step="0.01"> {{x.price * x.qty| number:2}}</span></div>
                 <div class="col-md-2">
-                <a <button ng-href='#viewcart' type="button" id = "{{x.id}}" ng-click= "deleteproduct(x)" class="btn btn-danger">Delete</button> </a>
+                <button type="button" id = "{{x.id}}" ng-click= "deleteproduct(x)" class="btn btn-danger">Delete</button>
                 </div>
                 </li>
             </li>
@@ -33,7 +33,7 @@
             <div  class="col-md-3"><span class="quantity"> Total: </span></div>
             <div class="col-md-3"><span class="itemName">{{total | number:2}} </span></div>
             <div class="col-md-4">
-                <a <button  type="button" class="btn btn-primary" ng-disabled="valid==0" ng-href='#checkout' > Checkout</button></a>
+                <a <button  type="button" class="btn btn-primary" ng-disabled="valid!=1" ng-href='#{{linktoroute}}' > Checkout</button></a>
             </div>
             </li>
         </ul>

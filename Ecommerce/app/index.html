@@ -20,7 +20,7 @@
   <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
 
 </head>
-<body ng-app="myApp">
+<body ng-controller=MainController style="padding:50px;" ng-app="myApp">
 
 
 
@@ -31,7 +31,7 @@
   </div>
 </div>
 
-<nav class="navbar navbar-inverse">
+<nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
@@ -47,11 +47,12 @@
         <li><a href="#orders">Contact Us</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#viewcart"><span class="glyphicon glyphicon-shopping-cart"></span> Cart</a></li>
+        <li><a href="#viewcart"><span class="glyphicon glyphicon-shopping-cart"></span> Cart {{cartCount()}}</a></li>
       </ul>
     </div>
   </div>
 </nav>
+
 <div ng-view></div>
 
 <script src="bower_components/jquery/dist/jquery.js"></script>
