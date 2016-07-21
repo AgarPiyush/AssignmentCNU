@@ -8,44 +8,67 @@ app.config(['$routeProvider',
     $routeProvider.
     when('/products/:param', {
         controller: 'singleProduct',
-        templateUrl: 'templates/product.html',
-    }).
+        templateUrl: 'templates/product.html'
+        }).
     when('/products',
-          {
+        {
             controller: 'allProduct',
-            templateUrl: 'templates/allproducts.html',
-          }).
+            templateUrl: 'templates/allproducts.html'
+        }).
     when('/category_products/:param',
         {
             controller: 'categoryContoller',
-            templateUrl: 'templates/categoryProducts.html',
+            templateUrl: 'templates/categoryProducts.html'
         }).
 
       when('/viewcart/',
-           {
-               controller: 'cartController',
-               templateUrl: 'templates/cart.html',
-           }).
-        when('/checkout/',
         {
-                controller: 'checkoutController',
-                 templateUrl: 'templates/formUser.html'
-        })
-         .otherwise({ redirectTo: '/products'});
+            controller: 'cartController',
+            templateUrl: 'templates/cart.html'
+        }).
+    when('/checkout/',
+        {
+            controller: 'checkoutController',
+            templateUrl: 'templates/formUser.html'
+        }).
+    when('/orderSummary/',
+         {
+             controller: 'summaryController',
+             templateUrl: 'templates/orderSummary.html'
+
+         }).
+      when('/contactus/',
+          {
+              controller: 'contactus',
+              templateUrl: 'templates/contactus.html',
+
+          })
+      .otherwise({ redirectTo: '/products'});
 }]);
 
 // For display all product
-app.controller('MainController', function($scope, $http) {
+app.controller('MainController', function($scope, $http, $localStorage) {
     $scope.cartCount=function () {
        //TODO
-        //if($localStora)
-        return 1;
+        if($localStorage == undefined || $localStorage.countCart == undefined) {
+            $localStorage.countCart = 0;
+            console.log("Count cart zero");
+
+            return $localStorage.countCart;
+        }
+        else {
+            console.log("Count cart");
+            return $localStorage.countCart;
+        }
     };
 });
-app.controller('allProduct', function($scope, $http) {
+
+app.controller('allProduct', function($scope, $http, $localStorage) {
   $http.get("http://localhost:8000/api/products/")
       .then(function(response) {
-        $scope.myWelcome = response.data.data;
+          console.log("All products");
+
+          $scope.myWelcome = response.data.data;
       });
   $http.get("http://localhost:8000/api/category/")
       .then(function(response) {
@@ -58,8 +81,10 @@ app.controller("singleProduct", function($scope, $http, $routeParams, $localStor
 
     $http.get("http://127.0.0.1:8000/api/products/"+$routeParams.param)
       .then(function (response) {
-        $scope.product_name = response.data.data;});
+        $scope.product_name = response.data.data;
+          console.log($scope.product_name);
 
+      });
         $scope.addToCart = function(product_name) {
             if($localStorage.orderId == undefined) {
                 console.log("New order created");
@@ -68,15 +93,22 @@ app.controller("singleProduct", function($scope, $http, $routeParams, $localStor
                         $scope.newOrder = response.data.data;
                         $localStorage.orderId = $scope.newOrder;
                         console.log($localStorage.orderId);
+                        var k = '{ "product_id":'+product_name.id+', "price":'+ product_name.price + ',"order_id":' + $localStorage.orderId.id +',"qty":'+ $scope.qty +'}';
+                        $http.post("http://localhost:8000/api/orders/"+$localStorage.orderId.id+"/orderLineItem/",k)
+                            .then(function (response) {
+                                console.log("Product added to order");
+                        });
                     });
-                 }
-            console.log($scope);
-            var k = '{ "product_id":'+product_name.id+', "price":'+ product_name.price + ',"order_id":' + $localStorage.orderId.id +',"qty":'+ $scope.qty +'}';
-            $http.post("http://localhost:8000/api/orders/"+$localStorage.orderId.id+"/orderLineItem/",k)
-            .then(function (response) {
-                    console.log("Product added to order");
-                    window.alert("Added to cart")
-            });
+                $localStorage.countCart = 1;
+            }
+            else {
+                var k = '{ "product_id":' + product_name.id + ', "price":' + product_name.price + ',"order_id":' + $localStorage.orderId.id + ',"qty":' + $scope.qty + '}';
+                $http.post("http://localhost:8000/api/orders/" + $localStorage.orderId.id + "/orderLineItem/", k)
+                    .then(function (response) {
+                        console.log("Product added to order hey ");
+                        $localStorage.countCart += 1;
+                    });
+            }
         };
 });
 
@@ -107,7 +139,7 @@ app.controller("cartController", function($scope, $http,$localStorage) {
                     var product = $scope.cartProducts[i];
                     total += (product.price * product.qty);
                 }
-                $scope.cartCount = $scope.cartProducts.length;
+                $localStorage.countCart = $localStorage.cartProducts.length;
                 $scope.total = total;
             });
 
@@ -141,7 +173,7 @@ app.controller("cartController", function($scope, $http,$localStorage) {
         $scope.deleteproduct = function (productInCart) {
             var i = $scope.cartProducts.indexOf(productInCart);
             $scope.cartProducts.splice(i, 1);
-            $scope.cartCount = $scope.cartCount - 1;
+            $localStorage.countCart = $localStorage.countCart - 1;
             $scope.total = $scope.total - productInCart.price * productInCart.qty;
             $http.delete("http://127.0.0.1:8000/api/orders/" + productInCart.order_id + "/orderLineItem/" + productInCart.id + "/");
             $scope.verify_product();
@@ -153,17 +185,54 @@ app.controller("cartController", function($scope, $http,$localStorage) {
 
 
 app.controller("checkoutController", function($scope, $http,$localStorage) {
-
-
         $scope.master = {};
         $scope.update = function(user) {
+            console.log("Inside checkout")
             $scope.master = angular.copy(user);
             var k = '{ "pk":'+$localStorage.orderId.id+', "username":"'+ $scope.master.username + '","address":"' + $scope.master.address +'","status":"Completed"}';
-            $http.patch("http://localhost:8000/api/orders/"+$localStorage.orderId.id+"/",k)
-            window.alert("Order Placed");
-            window.location = "http://localhost:9000#products";
-            $localStorage.$reset()
+            $http.patch("http://localhost:8000/api/orders/"+$localStorage.orderId.id+"/",k);
+            // window.alert("Order Placed");
+            // window.location = "http://localhost:9000#orderSummary";
         };
 });
 
+
+
+app.controller("contactus", function($scope, $http,$localStorage) {
+    $scope.master = {};
+    $scope.contact = function() {
+        window.alert("We will get back to you as soon as possible");
+        window.location = "http://localhost:9000#products";
+    };
+    $(document).ready(function(){
+        $('button').click(function(){
+            $('.alert').show()
+        })
+    });
+});
+
+
+
+
+app.controller("summaryController", function($scope, $http,$localStorage) {
+    console.log("Inside");
+    if($localStorage.orderId != undefined) {
+        console.log("Final");
+        console.log($localStorage);
+        console.log($localStorage.orderId);
+        $http.get("http://127.0.0.1:8000/api/orders/" + $localStorage.orderId.id + "/orderLineItem")
+             .then(function (response) {
+                 console.log(("http://127.0.0.1:8000/api/orders/" + $localStorage.orderId.id + "/orderLineItem"));
+                 $scope.cartProducts = response.data.data;
+                 var total = 0;
+                 for (var i = 0; i < $scope.cartProducts.length; i++) {
+                     var product = $scope.cartProducts[i];
+                     total += (product.price * product.qty);
+                 }
+                 $localStorage.countCart = $scope.cartProducts.length;
+                 $scope.total = total;
+                 $localStorage.$reset();
+             });
+        }
+});
 

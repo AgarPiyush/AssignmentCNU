@@ -1,0 +1,45 @@
+<body>
+
+
+<div class="container text-center">
+
+    <div class="col-md-4 col-sm-12">
+        <div class="bigcart"></div>
+        <h1>Order Summary. Thank you for shopping with us</h1>
+        <p>
+        </p>
+    </div>
+
+    <div class="col-md-8 col-sm-12 text-left">
+        <ul>
+            <li class="row list-inline columnCaptions">
+                <div class="col-md-2"><span>QTY</span></div>
+                <div class="col-md-2"><span>Code</span></div>
+                <div class="col-md-2"><span>Price Each</span></div>
+                <div class="col-md-2"><span>Total Price</span></div>
+            </li>
+            <li class="row"  ng-repeat="x in cartProducts">
+                <div class="col-md-2" ><span id = "{{x.id}}" class="quantity">{{x.qty}} </span></div>
+                <div class="col-md-2" ><span id = "{{x.id}}" class="itemName">{{x.code}} </span></div>
+                <div class="col-md-2" ><span id = "{{x.id}}" class="itemName">{{x.price}} </span></div>
+                <div class="col-md-2" ><span id = "{{x.id}}" class="price" *step="0.01"> {{x.price * x.qty| number:2}}</span></div>
+            </li>
+            </li>
+            <li class="row">
+
+                <div  class="col-md-3"><span class="quantity"> Total: </span></div>
+                <div class="col-md-3"><span class="itemName">{{total | number:2}} </span></div>
+                <div class="col-md-4">
+                    <a <button  type="button" class="btn btn-primary" href='#products' > Continue Shopping</button></a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- The popover content -->
+
+<div id="popover" style="display: none">
+    <a href="#"><span class="glyphicon glyphicon-pencil"></span></a>
+    <a href="#"><span class="glyphicon glyphicon-remove"></span></a>
+</div>
