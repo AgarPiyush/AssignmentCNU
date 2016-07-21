@@ -202,4 +202,4 @@ class HealthViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         return JsonResponse(serializer.data, safe=False)
 
 def health(request):
-    return JsonResponse(status=200)
+    return HttpResponse(status=200)
