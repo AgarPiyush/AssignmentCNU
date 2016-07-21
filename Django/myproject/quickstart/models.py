@@ -94,7 +94,7 @@ class Orders(models.Model):
     orderdate = models.DateField(db_column='orderDate', blank=True, null=True)  # Field name made lowercase.
     userid = models.ForeignKey('Users', models.DO_NOTHING, db_column='userId', blank=True, null=True)  # Field name made lowercase.
     status = models.CharField(max_length=255, blank=True, null=True)
-    discontinued = models.IntegerField(default=0)
+    discontinued = models.BooleanField(default=0)
 
     class Meta:
         managed = True
@@ -123,7 +123,7 @@ class Product(models.Model):
     quantityinstock = models.IntegerField(db_column='quantityInStock',default=0)  # Field name made lowercase.
     buyprice = models.FloatField(db_column='buyPrice')  # Field name made lowercase.
     categoryid = models.ForeignKey(Category, models.DO_NOTHING, db_column='categoryId', blank=True, null=True)  # Field name made lowercase.
-    discontinued = models.IntegerField(blank=True, null=True)
+    discontinued = models.BooleanField(blank=True, default=0)
 
     class Meta:
         managed = True

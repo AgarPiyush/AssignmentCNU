@@ -10,15 +10,16 @@ class ProductSerializer(serializers.ModelSerializer):
     code = serializers.CharField(source='productcode')
     description = serializers.CharField(source='productdescription')
     price = serializers.FloatField(source='buyprice')
-    categoryname = serializers.CharField(source='categoryid.categoryname')
-    categoryid = serializers.CharField(source='categoryid.categoryid', required = False)
+    category = serializers.CharField(source='categoryid.categoryname')
+    category_id = serializers.CharField(source='categoryid.categoryid', required = False)
     qty = serializers.IntegerField(source='quantityinstock',required=False)
     class Meta:
         model = Product
-        fields = ('id', 'code', 'description','price','categoryname','categoryid','qty')
+        fields = ('id', 'code', 'description','price','category','category_id','qty')
 
     def create(self, validated_data):
         print validated_data
+        print validated_data['categoryid'].get('category')
         productObj = Product.objects.create(
             buyprice = validated_data['buyprice'],
             productcode = validated_data.get('productcode',None),
@@ -45,9 +46,8 @@ class ProductSerializer(serializers.ModelSerializer):
         )
 
         instance.categoryid = categoryObj
-        categoryObj.categoryname = validated_data['categoryid'].get('categoryname')
-        print categoryObj.categoryname
-        print categoryObj.categoryid
+        if validated_data.get('categoryid') != None:
+            categoryObj.categoryname = validated_data['categoryid'].get('categoryname', instance.categoryid.categoryname)
         categoryObj.save()
         instance.save()
         return instance

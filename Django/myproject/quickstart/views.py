@@ -126,7 +126,7 @@ class OrderLineViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Re
             orderid = ordersObj[0],
             productid = productObj[0],
             priceeach = request.data["price"],
-            quantityordered = request.data["qty"]
+       #     quantityordered = request.data["qty"]
         )
         serializer = OrderLineSerializer(orderlineObj)
         return JsonResponse(serializer.data, safe=False)
@@ -202,4 +202,4 @@ class HealthViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         return JsonResponse(serializer.data, safe=False)
 
 def health(request):
-    return HttpResponse(status=200)
+    return JsonResponse(status=200)
