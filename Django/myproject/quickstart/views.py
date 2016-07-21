@@ -6,7 +6,7 @@ from rest_framework import generics
 # Create your views here.
 
 from django.db.models import Count, Sum, F, ExpressionWrapper
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from rest_framework import viewsets
 from serializers import *
 from rest_framework import mixins
@@ -193,3 +193,13 @@ class ProductsInCategoryViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         query = query.filter(categoryid__categoryid = kwargs["category_id"])
         serializer = ProductSerializer(query, many=True)
         return JsonResponse(serializer.data, safe=False)
+
+class HealthViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    def list(self, request, *args, **kwargs):
+        query = Product.objects.filter(discontinued=0)
+        query = query.filter(categoryid__categoryid = kwargs["category_id"])
+        serializer = ProductSerializer(query, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+def health(request):
+    return HttpResponse(status=200)
