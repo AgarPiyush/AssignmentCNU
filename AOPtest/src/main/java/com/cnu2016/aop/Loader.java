@@ -20,15 +20,16 @@ public class Loader implements ClassFileTransformer {
         try
         {
             ClassPool pool = ClassPool.getDefault();
-            if(className.startsWith("com/cnu2016")) {
+            //System.out.println("Okay " +className);
+            if(className.startsWith("ttsu/game/tictactoe")) {
                 cl = pool.makeClass(new java.io.ByteArrayInputStream(bytes));
                 String classNames = cl.getName();
                 System.out.println("Class names " + classNames);
-                CtBehavior[] methods = cl.getDeclaredBehaviors();
+                CtBehavior[] methods = cl.getDeclaredMethods();
                 for (int i = 0; i <methods.length; i++) {
                     if(!methods[i].isEmpty())
                     {
-                        methods[i].insertBefore("System.out.println(\"Number of arguments: \"); System.out.println($args.length);");
+                        methods[i].insertBefore("System.out.print(\"Number of arguments: \"); System.out.println($args.length);");
                         methods[i].insertBefore("System.out.println(\"Arguments: \"); for(int j=0; j<$args.length; j++) System.out.print(\" \"+$args[j]);System.out.println();");
                         methods[i].insertAfter("System.out.println(\"Return type: \"+$_);");
                     }
