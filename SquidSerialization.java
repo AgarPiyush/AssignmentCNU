@@ -30,7 +30,7 @@ class SquidSerialization {
 
     public static void main() throws IOException {
 
-        SquidError obj = new SquidError("Hey");
+        SquidError obj = new SquidError("My Name");
         FileOutputStream fout = new FileOutputStream(obj.getName());
         ObjectOutputStream oos = new ObjectOutputStream(fout);
         oos.writeObject(obj); // Exception thrown here
