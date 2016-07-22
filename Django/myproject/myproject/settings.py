@@ -94,8 +94,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'cnu2016_pagarwal',
-        'USER': 'pagarwal',
-        'PASSWORD': 'pagarwal',
+        'USER': '[USER NAME]',
+        'PASSWORD': '[PASSWORD]',
         'HOST' : 'aline-cnu-insights-dev-cluster.cluster-czuocyoc6awe.us-east-1.rds.amazonaws.com',
         'PORT': '3306',
     }
