@@ -1,0 +1,6 @@
+.idea/
+target/
+./SpringProject/src/main/resources/application.properties
+./SpringProject/SpringProject.iml
+*.pyc
+

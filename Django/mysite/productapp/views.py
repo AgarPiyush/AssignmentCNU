@@ -3,10 +3,12 @@ from django.shortcuts import render
 # Create your views here.
 from . import models
 from datetime import datetime
-from models import OrderlineCopy, Orders
+from models import *
 from django.db.models import Count, Sum, F, ExpressionWrapper
 from django.db import models
 from django.http import JsonResponse
+from rest_framework import viewsets
+from serializers import *
 
 
 from django.http import HttpResponse
@@ -53,4 +55,24 @@ def ordersDetails(request):
     return JsonResponse(dict2)
 
 
+class ProductViewSet(viewsets.ModelViewSet):
+
+    serializer_class = ProductSerializer
+    def get_queryset(self):
+        return Product.objects.all()
+
+
+
+class OrdersViewSet(viewsets.ModelViewSet):
+
+    serializer_class = OrdersSerializer
+    def get_queryset(self):
+        return Orders.objects.all()
+
+
+class UserssViewSet(viewsets.ModelViewSet):
+
+    serializer_class = UsersSerializer
+    def get_queryset(self):
+        return Orders.objects.all()
 
