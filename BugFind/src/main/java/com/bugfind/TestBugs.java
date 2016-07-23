@@ -69,7 +69,7 @@ class Thread2 extends Thread1
     }
 }
 
-public class BadCalender2 extends  Thread2{
+public class TestBugs extends  Thread2{
 
     @Override
     public void run()
@@ -79,7 +79,7 @@ public class BadCalender2 extends  Thread2{
 
     public static void main(String[] args)
     {
-        BadCalender2 obj = new BadCalender2();
+        TestBugs obj = new TestBugs();
         obj.run();
     }
 }

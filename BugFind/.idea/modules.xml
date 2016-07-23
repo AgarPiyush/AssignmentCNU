@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/bugsfind.iml" filepath="$PROJECT_DIR$/bugsfind.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/BugFind.iml" filepath="$PROJECT_DIR$/.idea/BugFind.iml" />
     </modules>
   </component>
 </project>
