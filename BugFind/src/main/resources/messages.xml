@@ -1,0 +1,26 @@
+<MessageCollection>
+    <Detector class="com.bugfind.BugDetector">
+        <Details>
+            <![CDATA[
+<p>This detector warns about static fields of type java.util.Calendar or java.text.DateFormat (and subclasses) because Calendars are inherently unsafe for multithreaded use. It is a fast detector.</p>
+]]>
+        </Details>
+    </Detector>
+
+    <BugPattern type="THREAD_ERROR">
+        <ShortDescription>Thread Error</ShortDescription>
+        <LongDescription> Did you intend to use Thread.start() to create a new execution thread?</LongDescription>
+        <Details>
+            Thread Error Details
+        </Details>
+    </BugPattern>
+
+    <BugPattern type="RUNNABLE_ERROR">
+        <ShortDescription>Runnable Error</ShortDescription>
+        <LongDescription> Did you intend to put run() method in new thread?</LongDescription>
+        <Details>
+            Runnable Error Details
+        </Details>
+    </BugPattern>
+    <BugCode abbrev="STCAL">Method invokes run</BugCode>
+</MessageCollection>

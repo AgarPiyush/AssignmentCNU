@@ -1,0 +1,6 @@
+<FindbugsPlugin>
+    <Detector class="com.bugfind.BugDetector" speed="fast" reports="THREAD_ERROR"/>
+    <BugPattern abbrev="STCAL" type="THREAD_ERROR" category="THREAD_ERROR" />
+    <BugPattern abbrev="STCAL" type="RUNNABLE_ERROR" category="RUNNABLE_ERROR" />
+</FindbugsPlugin>
+

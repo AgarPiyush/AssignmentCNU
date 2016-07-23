@@ -1,0 +1,6 @@
+FileName, StartLineNumber, EndLineNumber, Violation String
+com.bugfind.BadCalender2.java, 83, 83, Did you intend to use Thread.start() to create a new execution thread?
+com.bugfind.BadCalender2.java, 21, 21, Did you intend to use Thread.start() to create a new execution thread?
+com.bugfind.BadCalender2.java, 54, 54, Did you intend to use Thread.start() to create a new execution thread?
+com.bugfind.BadCalender2.java, 68, 68, Did you intend to use Thread.start() to create a new execution thread?
+com.bugfind.BadCalender2.java, 35, 35, Did you intend to put run() method in new thread?
