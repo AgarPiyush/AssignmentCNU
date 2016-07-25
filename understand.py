@@ -16,8 +16,6 @@ for method in methods:
                                         for eachref in called_by:
                                                 entity = eachref.ent()
                                                 entityl = (eachref.line(), eachref.column())
-                                                class_entity = entity.ref('DefineIn').ent()
-                                                class_entity_super = class_entity.refs('Couple')
                                                 if 'Runnable' in interface_extend:
                                                         print('Method: ', method.longname(), 'located in class', run_class.ent().longname(),            
                                                         'which implements Runnable is called by', entity.longname(), 'at (line, col)',entityl, 
